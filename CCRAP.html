@@ -1,0 +1,1693 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f5f5f7" />
+  <meta name="description" content="Cybercrime Reporting & Awareness Portal" />
+  <title>Cybercrime Reporting & Awareness Portal</title>
+  <style>
+:root {
+  --bg: #f5f5f7;
+  --surface: rgba(255,255,255,.82);
+  --surface-solid: #fff;
+  --surface-soft: rgba(255,255,255,.58);
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --line: rgba(0,0,0,.08);
+  --accent: #007aff;
+  --accent-soft: rgba(0,122,255,.10);
+  --green: #34c759;
+  --orange: #ff9f0a;
+  --red: #ff3b30;
+  --shadow: 0 18px 50px rgba(0,0,0,.08), 0 3px 10px rgba(0,0,0,.04);
+  --shadow-sm: 0 7px 25px rgba(0,0,0,.06);
+  --radius-xl: 28px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+  --nav-space: 300px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); }
+body { overflow-x: hidden; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .55; }
+::selection { background: rgba(0,122,255,.18); }
+
+.app { min-height: 100vh; }
+.shell { min-height: 100vh; position: relative; }
+.shell::before { content:""; position:fixed; inset:-10% -20%; z-index:-2; background: radial-gradient(circle at 15% 15%, rgba(0,122,255,.08), transparent 28%), radial-gradient(circle at 80% 20%, rgba(88,86,214,.08), transparent 30%), radial-gradient(circle at 55% 85%, rgba(52,199,89,.06), transparent 24%); pointer-events:none; }
+.shell::after { content:""; position:fixed; inset:0; z-index:-1; background: linear-gradient(180deg, rgba(255,255,255,.25), transparent 30%); pointer-events:none; }
+
+.view { max-width: 1400px; margin: 0 auto; padding: 40px 40px 90px calc(var(--nav-space) + 40px); }
+.topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom: 30px; }
+.eyebrow { color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: .02em; }
+h1,h2,h3,h4,p { margin:0; }
+h1 { font-size: clamp(36px, 4vw, 58px); line-height: 1.02; letter-spacing: -.04em; }
+h2 { font-size: clamp(26px, 2.7vw, 38px); letter-spacing: -.03em; }
+h3 { font-size: 20px; letter-spacing: -.02em; }
+.lead { color: var(--muted); font-size: 18px; line-height:1.55; max-width: 760px; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+
+ .nav-dock { position:fixed; left:20px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:10px; align-items:stretch; z-index:80; }
+.nav-pill { display:flex; flex-direction:column; gap:6px; padding:9px; min-width:260px; background:rgba(255,255,255,.72); border:1px solid rgba(255,255,255,.72); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); border-radius:28px; box-shadow:var(--shadow); }
+.nav-item { position:relative; width:100%; min-height:56px; padding:0 16px; border:0; background:transparent; color:#5f6368; border-radius:20px; display:flex; align-items:center; justify-content:flex-start; gap:12px; transition: transform .2s ease, background .2s ease, color .2s ease; }
+.nav-item:hover { transform:translateX(2px); color:var(--text); background:rgba(0,0,0,.05); }
+.nav-item.active { color:var(--accent); background:#e5e5ea; }
+.nav-icon { width:23px; height:23px; display:block; flex:none; }
+.gear-icon { display:grid; place-items:center; width:24px; height:24px; font-size:20px; line-height:1; flex:none; }
+.nav-text { display:block; font-size:14px; line-height:1; font-weight:600; text-align:left; white-space:nowrap; }
+.nav-label { display:none; }
+.search-fab { width:56px; height:56px; margin:0 auto; border:1px solid rgba(255,255,255,.72); border-radius:50%; background:rgba(255,255,255,.72); backdrop-filter:blur(24px) saturate(180%); -webkit-backdrop-filter:blur(24px) saturate(180%); box-shadow:var(--shadow); color:var(--text); display:grid; place-items:center; position:relative; }
+.search-fab:hover { transform:translateY(-2px); }
+.search-fab .nav-icon { width:25px; height:25px; }
+.search-caption { display:none; }
+.mobile-nav { display:none; }
+
+.nav-item { flex-direction:row; justify-content:flex-start; gap:12px; width:100%; height:56px; border-radius:22px; }
+.nav-item .nav-icon { width:24px; height:24px; }
+.nav-text { display:block; font-size:14px; line-height:1; font-weight:600; text-align:left; white-space:nowrap; }
+.nav-label { display:none; }
+.search-fab { flex-direction:row; gap:0; }
+.search-fab .nav-icon { width:28px; height:28px; }
+.search-caption { display:none; }
+.topbar-left { display:flex; align-items:flex-start; gap:12px; min-width:0; }
+.back-btn { display:inline-flex; align-items:center; gap:6px; min-height:38px; padding:0 12px 0 9px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--text); box-shadow:var(--shadow-sm); font-weight:700; cursor:pointer; margin-top:2px; }
+.back-btn .nav-icon { width:18px; height:18px; }
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0;} input[type=number]{-moz-appearance:textfield;}
+.full-width-action{width:100%;justify-content:flex-start;}
+
+
+.hero { display:grid; grid-template-columns: 1.3fr .7fr; gap:22px; margin-bottom:30px; }
+.hero-main, .hero-side { border-radius:var(--radius-xl); background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow-sm); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); }
+.hero-main { padding:40px; min-height:320px; display:flex; flex-direction:column; justify-content:flex-end; }
+.hero-main .accent-line { width:58px; height:6px; border-radius:999px; background:var(--accent); margin-bottom:20px; }
+.hero-side { padding:28px; display:flex; flex-direction:column; justify-content:space-between; gap:18px; }
+.hero-side .mini-stat { display:flex; justify-content:space-between; align-items:flex-end; padding:16px 0; border-bottom:1px solid var(--line); }
+.hero-side .mini-stat:last-child { border-bottom:0; }
+.mini-stat strong { font-size: 36px; letter-spacing:-.04em; }
+
+.card-grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:18px; }
+.card { background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow-sm); border-radius:var(--radius-lg); padding:26px; backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); }
+.action-card { min-height:250px; display:flex; flex-direction:column; justify-content:space-between; transition:transform .2s ease, box-shadow .2s ease; }
+.action-card:hover { transform:translateY(-3px); box-shadow:var(--shadow); }
+.action-card .icon-wrap { width:46px; height:46px; border-radius:16px; background:var(--accent-soft); display:grid; place-items:center; color:var(--accent); margin-bottom:18px; }
+.action-card h3 { margin-bottom:8px; }
+.action-card p { color:var(--muted); line-height:1.5; }
+.card-link { border:0; background:transparent; padding:0; color:var(--accent); font-weight:600; text-align:left; }
+
+.section { margin-top:30px; }
+.section-head { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin-bottom:16px; }
+.grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+
+.btn { border:0; border-radius:14px; padding:12px 16px; font-weight:600; transition:.18s ease; display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+.btn-primary { background:var(--accent); color:#fff; box-shadow:0 8px 18px rgba(0,122,255,.2); }
+.btn-primary:hover { filter:brightness(.97); transform:translateY(-1px); }
+.btn-secondary { background:rgba(0,0,0,.055); color:var(--text); }
+.btn-secondary:hover { background:rgba(0,0,0,.08); }
+.btn-danger { background:rgba(255,59,48,.10); color:#b42318; }
+.btn-ghost { background:transparent; color:var(--muted); }
+.btn-ghost:hover { background:rgba(0,0,0,.04); color:var(--text); }
+.btn-row { display:flex; gap:10px; flex-wrap:wrap; }
+
+.form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.field { display:flex; flex-direction:column; gap:7px; }
+.field.full { grid-column:1 / -1; }
+label { font-size:13px; color:var(--muted); font-weight:600; }
+input, select, textarea { width:100%; border:1px solid var(--line); background:rgba(255,255,255,.78); color:var(--text); border-radius:14px; padding:13px 14px; outline:none; transition:border .15s ease, box-shadow .15s ease; }
+textarea { min-height:120px; resize:vertical; }
+input:focus, select:focus, textarea:focus { border-color:rgba(0,122,255,.45); box-shadow:0 0 0 4px rgba(0,122,255,.10); }
+.helper { color:var(--muted); font-size:12px; line-height:1.45; }
+
+.badge { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:6px 10px; font-size:12px; font-weight:700; background:rgba(0,0,0,.06); }
+.badge.green { background:rgba(52,199,89,.13); color:#17853f; }
+.badge.blue { background:rgba(0,122,255,.11); color:#0b66c3; }
+.badge.orange { background:rgba(255,159,10,.13); color:#a15f00; }
+.badge.red { background:rgba(255,59,48,.11); color:#b42318; }
+
+.table-wrap { overflow:auto; border-radius:16px; border:1px solid var(--line); }
+table { width:100%; border-collapse:collapse; min-width:700px; }
+th,td { padding:13px 14px; text-align:left; border-bottom:1px solid var(--line); }
+th { font-size:12px; color:var(--muted); font-weight:700; background:rgba(0,0,0,.02); }
+td { font-size:13px; }
+tr:last-child td { border-bottom:0; }
+
+.timeline { position:relative; margin:14px 0 0 8px; padding-left:26px; }
+.timeline::before { content:""; position:absolute; left:7px; top:8px; bottom:8px; width:2px; background:rgba(0,0,0,.08); }
+.timeline-item { position:relative; padding:0 0 22px; }
+.timeline-dot { position:absolute; left:-26px; top:4px; width:16px; height:16px; border-radius:50%; background:#d2d2d7; border:4px solid var(--surface-solid); box-shadow:0 0 0 1px rgba(0,0,0,.08); }
+.timeline-item.current .timeline-dot { background:var(--accent); box-shadow:0 0 0 4px rgba(0,122,255,.12); }
+.timeline-item.done .timeline-dot { background:var(--green); }
+.timeline-title { font-weight:700; }
+.timeline-meta { color:var(--muted); font-size:12px; margin-top:4px; }
+
+.modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.35); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); z-index:200; display:grid; place-items:center; padding:20px; }
+.modal { width:min(980px, 100%); max-height:min(88vh, 920px); overflow:auto; background:rgba(255,255,255,.92); border:1px solid rgba(255,255,255,.75); box-shadow:0 30px 90px rgba(0,0,0,.22); border-radius:30px; }
+.modal-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:22px 24px; border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(255,255,255,.92); backdrop-filter:blur(18px); z-index:1; }
+.modal-body { padding:24px; }
+.modal-close { width:40px; height:40px; border:0; border-radius:50%; background:rgba(0,0,0,.05); display:grid; place-items:center; }
+.search-layout { display:grid; grid-template-columns: 1fr 1.4fr; gap:14px; }
+.search-box, .search-results { border:1px solid var(--line); background:rgba(248,248,250,.86); border-radius:22px; padding:18px; }
+.search-results { min-height:300px; }
+.search-result { width:100%; text-align:left; border:0; background:var(--surface-solid); border-radius:16px; padding:16px; margin-bottom:10px; box-shadow:var(--shadow-sm); }
+.search-result:hover { box-shadow:var(--shadow); transform:translateY(-1px); }
+.search-result:last-child { margin-bottom:0; }
+.search-result .title { font-weight:700; margin-bottom:5px; }
+.search-result .desc { color:var(--muted); font-size:13px; line-height:1.45; }
+
+.quiz-option { width:100%; text-align:left; border:1px solid var(--line); background:rgba(255,255,255,.78); padding:13px 15px; border-radius:14px; margin-top:9px; }
+.quiz-option.selected { border-color:rgba(0,122,255,.4); background:var(--accent-soft); }
+.quiz-option.correct { border-color:rgba(52,199,89,.42); background:rgba(52,199,89,.11); }
+.quiz-option.wrong { border-color:rgba(255,59,48,.35); background:rgba(255,59,48,.08); }
+
+.kpi { border-radius:20px; padding:22px; background:var(--surface); border:1px solid var(--line); box-shadow:var(--shadow-sm); }
+.kpi .value { font-size:38px; font-weight:750; letter-spacing:-.04em; margin-top:6px; }
+.kpi .label { color:var(--muted); font-size:13px; }
+
+.login-page { min-height:100vh; display:grid; place-items:center; padding:24px; background:var(--bg); }
+.login-card { width:min(520px,100%); padding:34px; background:var(--surface); border:1px solid var(--line); border-radius:32px; box-shadow:var(--shadow); backdrop-filter:blur(20px); }
+.brand-mark { width:54px; height:54px; border-radius:18px; background:#000; color:#fff; display:grid; place-items:center; font-weight:800; margin-bottom:22px; }
+.segmented { display:flex; gap:4px; background:rgba(0,0,0,.06); padding:4px; border-radius:14px; margin:22px 0; }
+.segmented button { flex:1; border:0; background:transparent; padding:10px; border-radius:10px; color:var(--muted); font-weight:700; }
+.segmented button.active { background:var(--surface-solid); color:var(--text); box-shadow:0 2px 8px rgba(0,0,0,.06); }
+
+.toast-root { position:fixed; right:24px; top:24px; z-index:500; display:flex; flex-direction:column; gap:10px; width:min(360px, calc(100vw - 48px)); }
+.toast { display:flex; gap:12px; align-items:flex-start; background:rgba(28,28,30,.92); color:#fff; border-radius:16px; padding:14px 16px; box-shadow:0 18px 45px rgba(0,0,0,.2); backdrop-filter:blur(18px); animation:toastIn .25s ease; }
+.toast.success .dot { background:var(--green); }
+.toast.error .dot { background:var(--red); }
+.toast.warning .dot { background:var(--orange); }
+.toast.info .dot { background:var(--accent); }
+.toast .dot { width:9px; height:9px; border-radius:50%; margin-top:6px; flex:none; }
+.toast .title { font-weight:700; font-size:13px; }
+.toast .message { opacity:.85; font-size:12px; line-height:1.45; margin-top:2px; }
+@keyframes toastIn { from{opacity:0; transform:translateY(-8px) scale(.98)} to{opacity:1; transform:none} }
+
+.empty { padding:50px 20px; text-align:center; color:var(--muted); }
+.divider { height:1px; background:var(--line); margin:20px 0; }
+.profile-row { display:flex; align-items:center; gap:14px; }
+.avatar { width:48px; height:48px; border-radius:16px; background:#111; color:#fff; display:grid; place-items:center; font-weight:800; }
+.list { display:flex; flex-direction:column; gap:10px; }
+.list-item { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border:1px solid var(--line); border-radius:16px; background:rgba(255,255,255,.7); }
+
+.awareness-article { scroll-margin-top:30px; }
+.article-card { padding:24px; }
+.article-card + .article-card { margin-top:14px; }
+.article-card p { margin-top:10px; line-height:1.62; color:#444; }
+.article-card ul { margin:10px 0 0 20px; color:#444; line-height:1.65; }
+
+.upload-row { display:flex; gap:10px; flex-wrap:wrap; }
+
+.auth-form { margin-top:18px; }
+.login-title{font-size:26px;line-height:1.12;letter-spacing:-.03em;margin:0 0 4px;font-weight:750;}
+.auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:14px;padding:4px;background:rgba(0,0,0,.045);border:1px solid var(--line);border-radius:16px;}
+.auth-actions .auth-action:first-child{border-right:1px solid var(--line);border-radius:12px 0 0 12px;}
+.auth-actions .auth-action:last-child{border-radius:0 12px 12px 0;}
+.auth-action{min-height:46px;border:0;border-radius:12px;background:transparent;color:var(--text);font-weight:700;padding:0 14px;transition:transform .2s ease,background .2s ease,box-shadow .2s ease;}
+.auth-action:hover{background:var(--surface-solid);box-shadow:0 4px 14px rgba(0,0,0,.08);transform:translateY(-1px);}
+.auth-action:active{transform:scale(.98);}
+.auth-action-full{grid-column:1/-1;}
+.auth-foot { margin-top:18px; font-size:13px; text-align:center; color:var(--muted); }
+.auth-foot button { border:0; background:transparent; color:var(--accent); font-weight:700; }
+
+@media (max-width: 1100px) {
+  .hero { grid-template-columns:1fr; }
+  .card-grid { grid-template-columns:1fr; }
+  .grid-4 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+
+@media (max-width: 760px) {
+  :root { --nav-space: 0px; }
+  .view { padding:22px 18px 180px; }
+  .nav-dock { display:none; }
+  .mobile-nav { position:fixed; left:8px; right:8px; bottom:calc(env(safe-area-inset-bottom) + 10px); z-index:80; display:flex; align-items:flex-end; gap:4px; }
+  .mobile-nav .nav-pill { flex:1 1 auto; min-width:0; max-width:calc(100vw - 72px); overflow:hidden; scrollbar-width:none; flex-direction:row; justify-content:space-between; gap:0; padding:5px; border-radius:28px; background:rgba(255,255,255,.78); border:1px solid rgba(0,0,0,.08); }
+  .mobile-nav .nav-pill::-webkit-scrollbar { display:none; }
+  .mobile-nav .nav-item { flex:1 1 54px; width:54px; min-width:54px; height:68px; padding:0 3px; border-radius:28px; gap:3px; flex-direction:column; justify-content:center; align-items:center; }
+  .mobile-nav .nav-item .nav-icon, .mobile-nav .nav-item .gear-icon { width:24px; height:24px; }
+  .mobile-nav .nav-text { font-size:9.5px; line-height:1.05; white-space:nowrap; max-width:44px; text-align:center; }
+  .mobile-nav .nav-label { display:none; }
+  .mobile-nav .search-fab { width:52px; min-width:52px; height:52px; flex:none; border-radius:50%; gap:0; margin-bottom:6px; }
+  .mobile-nav .search-fab .nav-label { display:none; }
+  .topbar { align-items:flex-start; }
+  .hero-main { padding:26px; min-height:280px; }
+  .form-grid, .grid-2, .grid-3 { grid-template-columns:1fr; }
+  .search-layout { grid-template-columns:1fr; }
+  .modal-backdrop { padding:10px; }
+  .modal { border-radius:24px; }
+  .modal-body { padding:16px; }
+  .toast-root { right:12px; top:12px; width:calc(100vw - 24px); }
+  .grid-4 { grid-template-columns:1fr 1fr; }
+}
+
+
+@media (max-width:760px){
+  .login-title{font-size:24px;}
+  .auth-actions{gap:8px;padding:4px;}
+  .auth-action{font-size:13px;min-height:44px;padding:0 8px;}
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior:auto !important; animation:none !important; transition:none !important; }
+}
+
+
+/* Navigation role/responsive refinement */
+.nav-dock:not(.split-nav) { gap:0; }
+.nav-dock:not(.split-nav) .nav-pill { width:300px; }
+.mobile-nav:not(.split-nav) .nav-pill { width:100%; max-width:none; }
+.mobile-nav:not(.split-nav) { left:8px; right:8px; }
+
+@media (min-width: 761px) {
+  .view { padding-left: calc(var(--nav-space) + 52px); padding-right:52px; }
+  .nav-dock.split-nav .search-fab { margin-top:2px; }
+  .nav-dock:not(.split-nav) .nav-item { min-height:58px; }
+}
+
+@media (max-width: 760px) {
+  :root { --nav-space: 0px; }
+  .view { width:100%; max-width:none; padding:22px 14px 136px; }
+  .mobile-nav { bottom:calc(env(safe-area-inset-bottom) + 10px); }
+  .mobile-nav .nav-pill { min-width:0; width:100%; max-width:none; padding:5px; }
+  .mobile-nav .nav-item { min-width:0; width:auto; flex:1 1 0; height:64px; padding:0 2px; }
+  .mobile-nav .nav-text { font-size:clamp(9px, 2.6vw, 11px); max-width:none; }
+  .mobile-nav.split-nav .nav-pill { max-width:calc(100vw - 72px); }
+  .mobile-nav.split-nav { gap:6px; }
+  .mobile-nav.split-nav .search-fab { width:52px; min-width:52px; height:52px; }
+  .hero-main, .hero-side, .card, .table-card { width:100%; }
+  .hero { gap:14px; }
+  .card-grid { gap:14px; }
+  .topbar { gap:10px; margin-bottom:20px; }
+  h1 { font-size:clamp(32px, 9vw, 44px); }
+  h2 { font-size:clamp(24px, 7vw, 32px); }
+  .lead { font-size:16px; }
+}
+
+/* Dark appearance */
+body.dark {
+  --bg: #000;
+  --surface: rgba(28,28,30,.78);
+  --surface-solid: #1c1c1e;
+  --surface-soft: rgba(28,28,30,.6);
+  --text: #f5f5f7;
+  --muted: #98989d;
+  --line: rgba(255,255,255,.10);
+  --accent-soft: rgba(10,132,255,.18);
+  --shadow: 0 18px 50px rgba(0,0,0,.45);
+  --shadow-sm: 0 8px 25px rgba(0,0,0,.28);
+}
+body.dark input, body.dark select, body.dark textarea { background:rgba(28,28,30,.88); color:var(--text); }
+body.dark .article-card p, body.dark .article-card ul { color:#d1d1d6; }
+body.dark .nav-pill, body.dark .search-fab { background:rgba(28,28,30,.70); border-color:rgba(255,255,255,.10); }
+body.dark .modal, body.dark .modal-head { background:rgba(28,28,30,.94); }
+body.dark .search-box, body.dark .search-results { background:rgba(44,44,46,.7); }
+body.dark .auth-actions{background:rgba(255,255,255,.06);}
+body.dark .auth-action:hover{background:var(--surface-solid);}
+body.dark .search-result, body.dark .list-item, body.dark .quiz-option { background:rgba(44,44,46,.9); color:var(--text); }
+body.dark .timeline-dot { border-color:var(--surface-solid); }
+body.dark .btn-secondary { background:rgba(255,255,255,.09); color:var(--text); }
+body.dark .btn-ghost:hover { background:rgba(255,255,255,.07); }
+body.dark .hero-main, body.dark .hero-side, body.dark .card, body.dark .kpi { background:var(--surface); }
+
+  
+.evidence-gallery { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:12px; }
+.evidence-preview { border:1px solid var(--line); border-radius:18px; padding:10px; background:var(--surface-solid); overflow:hidden; }
+.evidence-preview img { display:block; width:100%; height:auto; max-height:520px; object-fit:contain; border-radius:12px; background:#f5f5f7; }
+.evidence-file { display:flex; align-items:center; gap:12px; padding:14px; border:1px solid var(--line); border-radius:16px; background:var(--surface-solid); }
+body.dark .evidence-preview img { background:#1c1c1e; }
+
+/* Utility navigation: fixed bottom-center control with square, all-visible expansion */
+.utility-nav{
+  position:fixed;
+  left:50%;
+  top:auto;
+  bottom:calc(env(safe-area-inset-bottom) + 22px);
+  transform:translateX(-50%);
+  z-index:90;
+  width:64px;
+  height:64px;
+  display:block;
+}
+.utility-toggle{
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:64px;
+  height:64px;
+  border:1px solid rgba(255,255,255,.76);
+  border-radius:50%;
+  background:rgba(255,255,255,.78);
+  color:var(--text);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:var(--shadow);
+  display:grid;
+  place-items:center;
+  transition:transform .28s var(--ease-out),background .2s ease,box-shadow .28s var(--ease-out);
+  flex:none;
+  z-index:3;
+}
+.utility-toggle:hover{transform:scale(1.03);}
+.utility-toggle .utility-dots{
+  width:22px;
+  height:22px;
+  display:grid;
+  grid-template-columns:repeat(2,7px);
+  grid-template-rows:repeat(2,7px);
+  gap:5px;
+  place-content:center;
+}
+.utility-toggle .utility-dots i{width:7px;height:7px;border-radius:50%;background:currentColor;display:block;}
+.utility-nav-panel{
+  position:absolute;
+  left:50%;
+  bottom:78px;
+  width:320px;
+  height:320px;
+  padding:10px;
+  transform:translate(-50%,14px) scale(.94);
+  transform-origin:bottom center;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  overflow:hidden;
+  transition:transform .3s var(--spring),opacity .22s var(--ease-out),visibility 0s linear .3s;
+}
+.utility-nav.expanded .utility-nav-panel{
+  transform:translate(-50%,0) scale(1);
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transition:transform .3s var(--spring),opacity .22s var(--ease-out),visibility 0s linear 0s;
+}
+.utility-nav .nav-pill{
+  width:100%;
+  height:100%;
+  min-width:0;
+  max-width:none;
+  padding:12px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  gap:8px;
+  overflow:hidden;
+  border-radius:28px;
+}
+.utility-nav .nav-item,
+.utility-nav .utility-switch{
+  width:100%;
+  min-width:0;
+  min-height:0;
+  height:auto;
+  padding:8px 5px;
+  border-radius:20px;
+  flex:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+  text-align:center;
+}
+.utility-nav .nav-item:hover{transform:translateY(-2px);}
+.utility-nav .nav-item .nav-icon,
+.utility-nav .nav-item .gear-icon{width:24px;height:24px;}
+.utility-nav .nav-text{display:block;font-size:12px;line-height:1.08;font-weight:650;text-align:center;white-space:normal;overflow-wrap:anywhere;}
+.utility-nav .nav-label{display:none;}
+.utility-nav .nav-switch-text{margin:0;}
+.utility-nav .utility-switch{
+  border:0;
+  background:transparent;
+  color:var(--text);
+  font-weight:700;
+  white-space:normal;
+  font-size:12px;
+  transition:transform .25s var(--spring),background .2s ease,box-shadow .2s ease;
+}
+.utility-nav .utility-switch:hover{background:rgba(0,0,0,.05);transform:translateY(-2px);}
+.utility-nav .utility-switch .nav-icon{width:23px;height:23px;}
+.utility-search{
+  position:absolute;
+  left:74px;
+  bottom:6px;
+  width:52px;
+  min-width:52px;
+  height:52px;
+  margin:0;
+  z-index:2;
+}
+.utility-search .nav-icon{width:23px;height:23px;}
+body.dark .utility-toggle{background:rgba(28,28,30,.78);border-color:rgba(255,255,255,.10);}
+body.dark .utility-nav .utility-switch:hover{background:rgba(255,255,255,.07);}
+
+@media (max-width:360px){
+  .utility-nav-panel{width:286px;height:286px;}
+  .utility-nav .nav-pill{padding:10px;gap:6px;}
+  .utility-nav .nav-item,.utility-nav .utility-switch{border-radius:18px;gap:5px;padding:6px 4px;}
+  .utility-nav .nav-item .nav-icon,.utility-nav .nav-item .gear-icon,.utility-nav .utility-switch .nav-icon{width:22px;height:22px;}
+  .utility-nav .nav-text,.utility-nav .utility-switch{font-size:11px;}
+}
+
+/* Content spacing now only needs to clear the fixed bottom control. */
+@media (min-width:761px){
+  :root{--nav-space:0px;}
+  .view{padding:40px 52px 150px;}
+}
+@media (max-width:760px){
+  .view{padding:22px 14px calc(122px + env(safe-area-inset-bottom));}
+}
+
+
+/* ===== Premium Apple-style visual uplift (visual layer only) ===== */
+:root{
+  --bg:#f5f5f7;
+  --surface:rgba(255,255,255,.72);
+  --surface-solid:#fff;
+  --surface-soft:rgba(255,255,255,.52);
+  --text:#1d1d1f;
+  --muted:#6e6e73;
+  --line:rgba(0,0,0,.075);
+  --accent:#007aff;
+  --accent-soft:rgba(0,122,255,.09);
+  --shadow:0 28px 70px rgba(0,0,0,.09),0 8px 24px rgba(0,0,0,.04);
+  --shadow-sm:0 14px 35px rgba(0,0,0,.06),0 3px 12px rgba(0,0,0,.035);
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --spring:cubic-bezier(.16,1,.3,1);
+}
+html{scroll-behavior:smooth;}
+body{
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Arial,sans-serif;
+  font-size:16px;
+}
+button,input,select,textarea{font-family:inherit;}
+::selection{background:rgba(0,122,255,.18);}
+
+h1,h2,h3,h4{font-weight:700;text-wrap:balance;}
+h1,h2{letter-spacing:-.02em;}
+h3,h4{letter-spacing:-.015em;}
+p,.lead,label,input,select,textarea,td,th{letter-spacing:0;}
+.lead{line-height:1.6;}
+
+.shell::before{background:radial-gradient(circle at 12% 10%,rgba(0,122,255,.055),transparent 26%),radial-gradient(circle at 88% 22%,rgba(88,86,214,.045),transparent 28%);}
+.shell::after{background:linear-gradient(180deg,rgba(255,255,255,.34),transparent 30%);}
+
+.view{padding-top:44px;}
+.topbar{margin-bottom:34px;}
+
+.nav-dock{gap:9px;}
+.nav-pill,.search-fab{
+  background:rgba(255,255,255,.66);
+  border-color:rgba(255,255,255,.88);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(28px) saturate(180%);
+  -webkit-backdrop-filter:blur(28px) saturate(180%);
+}
+.nav-pill{padding:10px;}
+.nav-item{
+  min-height:58px;
+  border-radius:20px;
+  color:#626266;
+  transition:transform .28s var(--ease-out),background .28s var(--ease-out),color .28s var(--ease-out),box-shadow .28s var(--ease-out);
+}
+.nav-item:hover{transform:translateX(3px);background:rgba(0,0,0,.045);}
+.nav-item.active{background:rgba(118,118,128,.14);box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);}
+.nav-item:active,.search-fab:active{transform:scale(.97);}
+.search-fab{transition:transform .28s var(--spring),box-shadow .28s var(--spring);}
+.search-fab:hover{transform:translateY(-3px);box-shadow:0 24px 55px rgba(0,0,0,.12);}
+
+.back-btn{background:rgba(255,255,255,.62);border-color:rgba(255,255,255,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);transition:transform .25s var(--spring),background .25s ease,box-shadow .25s ease;}
+.back-btn:hover{transform:translateX(-2px);box-shadow:var(--shadow-sm);}
+
+.hero{gap:24px;margin-bottom:36px;}
+.hero-main,.hero-side,.card,.kpi{
+  background:var(--surface);
+  border-color:rgba(255,255,255,.78);
+  box-shadow:var(--shadow-sm);
+  backdrop-filter:blur(24px) saturate(155%);
+  -webkit-backdrop-filter:blur(24px) saturate(155%);
+}
+.hero-main,.hero-side{border-radius:30px;}
+.hero-main{padding:44px;}
+.hero-main .accent-line{height:5px;width:48px;margin-bottom:22px;}
+.hero-side{padding:30px;}
+.card{border-radius:22px;padding:28px;}
+.card-grid{gap:20px;}
+.action-card{min-height:246px;transition:transform .35s var(--spring),box-shadow .35s var(--spring),background .35s ease;}
+.action-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);}
+.action-card:active{transform:translateY(-2px) scale(.99);}
+.action-card .icon-wrap{width:50px;height:50px;border-radius:17px;}
+
+.btn{
+  border-radius:15px;
+  min-height:44px;
+  padding:12px 17px;
+  transition:transform .25s var(--spring),box-shadow .25s var(--spring),background .25s ease,opacity .2s ease;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn:active{transform:scale(.97);opacity:.92;}
+.btn-primary{box-shadow:0 10px 24px rgba(0,122,255,.18);}
+.btn-secondary{background:rgba(0,0,0,.05);}
+
+input,select,textarea{
+  min-height:46px;
+  border-radius:15px;
+  background:rgba(255,255,255,.72);
+  transition:border-color .2s ease,box-shadow .25s var(--ease-out),background .25s ease,transform .2s ease;
+}
+input:hover,select:hover,textarea:hover{background:rgba(255,255,255,.9);}
+input:focus,select:focus,textarea:focus{transform:translateY(-1px);}
+textarea{min-height:126px;line-height:1.55;}
+
+.badge{padding:7px 11px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.table-wrap{border-radius:18px;background:rgba(255,255,255,.4);}
+th{background:rgba(0,0,0,.025);}
+.list-item{background:rgba(255,255,255,.62);transition:transform .25s var(--spring),background .25s ease,box-shadow .25s ease;}
+button.list-item:hover{transform:translateY(-2px);background:rgba(255,255,255,.9);box-shadow:var(--shadow-sm);}
+
+.modal-backdrop{
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(18px) saturate(115%);
+  -webkit-backdrop-filter:blur(18px) saturate(115%);
+  animation:premiumFade .28s var(--ease-out) both;
+}
+.modal{
+  border-radius:30px;
+  box-shadow:0 36px 110px rgba(0,0,0,.24),0 10px 28px rgba(0,0,0,.08);
+  transform-origin:center center;
+  animation:premiumModal .34s var(--spring) both;
+}
+.modal-head{padding:22px 26px;background:rgba(255,255,255,.84);}
+.modal-body{padding:26px;}
+.modal-close{transition:transform .22s var(--spring),background .2s ease;}
+.modal-close:hover{transform:rotate(5deg) scale(1.04);background:rgba(0,0,0,.08);}
+.modal-close:active{transform:scale(.94);}
+
+.search-layout{gap:18px;}
+.search-box,.search-results{border-radius:22px;background:rgba(248,248,250,.72);box-shadow:inset 0 1px 0 rgba(255,255,255,.65);}
+.search-result{transition:transform .3s var(--spring),box-shadow .3s var(--spring),background .2s ease;}
+.search-result:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm);background:#fff;}
+
+.toast{animation:toastIn .34s var(--spring) both;}
+
+.login-page{padding:28px;background:radial-gradient(circle at 50% 0%,rgba(0,122,255,.06),transparent 40%),var(--bg);}
+.login-card{padding:38px;border-radius:30px;background:rgba(255,255,255,.74);border-color:rgba(255,255,255,.86);box-shadow:var(--shadow);backdrop-filter:blur(26px) saturate(155%);-webkit-backdrop-filter:blur(26px) saturate(155%);}
+.brand-mark{border-radius:19px;box-shadow:0 10px 20px rgba(0,0,0,.12);}
+.segmented{background:rgba(118,118,128,.12);}
+.segmented button{transition:transform .25s var(--spring),background .2s ease,box-shadow .2s ease,color .2s ease;}
+.segmented button:active{transform:scale(.98);}
+
+.article-card{scroll-margin-top:28px;transition:transform .35s var(--spring),box-shadow .35s var(--spring),background .25s ease;}
+.article-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm);}
+
+/* Consistent scroll reveal: one motion model, no transform conflict with other effects. */
+.reveal-ready{
+  opacity:0;
+  transform:translate3d(0,24px,0);
+  transition:opacity .42s var(--ease-out),transform .42s var(--ease-out);
+  will-change:opacity,transform;
+}
+.reveal-ready.revealed{
+  opacity:1;
+  transform:translate3d(0,0,0);
+}
+
+@keyframes premiumFade{from{opacity:0}to{opacity:1}}
+@keyframes premiumModal{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px) scale(.985)}to{opacity:1;transform:none}}
+
+@media (max-width:760px){
+  .view{padding-top:20px;padding-bottom:150px;}
+  .topbar{margin-bottom:22px;}
+  .hero-main{padding:28px;border-radius:26px;}
+  .hero-side,.card{border-radius:20px;}
+  .card{padding:22px;}
+  .login-card{padding:26px;border-radius:26px;}
+  .mobile-nav .nav-pill{background:rgba(255,255,255,.72);box-shadow:0 18px 45px rgba(0,0,0,.11);}
+  .mobile-nav .nav-item{transition:transform .25s var(--spring),background .25s ease,color .25s ease;}
+  .mobile-nav .nav-item.active{background:rgba(118,118,128,.14);}
+  .modal{border-radius:26px;}
+}
+
+body.dark .login-page{background:radial-gradient(circle at 50% 0%,rgba(10,132,255,.10),transparent 40%),var(--bg);}
+body.dark .modal-backdrop{background:rgba(0,0,0,.56);}
+body.dark input:hover,body.dark select:hover,body.dark textarea:hover{background:rgba(44,44,46,.98);}
+body.dark .list-item,body.dark .search-result{background:rgba(44,44,46,.82);}
+body.dark button.list-item:hover,body.dark .search-result:hover{background:#2c2c2e;}
+body.dark .modal-head{background:rgba(28,28,30,.86);}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal-ready{opacity:1!important;transform:none!important;transition:none!important;}
+}
+
+</style>
+
+<style id="google-sans-multicolor">
+/* Google Sans typography + restrained multi-colour Material-inspired interface */
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Text:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,-50..200&display=swap');
+
+:root{
+  --font-ui:'Google Sans','Google Sans Text',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --blue:#1a73e8; --blue-soft:#e8f0fe;
+  --green:#1e8e3e; --green-soft:#e6f4ea;
+  --yellow:#f9ab00; --yellow-soft:#fef7e0;
+  --red:#d93025; --red-soft:#fce8e6;
+  --purple:#9334e6; --purple-soft:#f3e8fd;
+  --cyan:#0b9eb7; --cyan-soft:#e6f7fb;
+  --pink:#c5228a; --pink-soft:#fce8f3;
+}
+html,body,button,input,select,textarea{font-family:var(--font-ui);}
+body{letter-spacing:-.005em;}
+h1,h2,h3,h4,h5,h6,.login-title,.nav-text,.nav-label,.btn,.badge,.eyebrow{font-family:'Google Sans','Google Sans Text',var(--font-ui);}
+
+/* Multi-colour, still calm and consistent */
+.btn-primary{background:var(--blue);box-shadow:0 8px 18px rgba(26,115,232,.22);}
+.btn-secondary{background:var(--purple-soft);color:#7627b8;}
+.btn-secondary:hover{background:#e8d8f8;}
+.btn-danger{background:var(--red-soft);color:var(--red);}
+.btn-ghost{color:var(--blue);}
+.icon-wrap{background:var(--blue-soft);color:var(--blue);}
+.card-grid .action-card:nth-child(2) .icon-wrap{background:var(--green-soft);color:var(--green);}
+.card-grid .action-card:nth-child(3) .icon-wrap{background:var(--purple-soft);color:var(--purple);}
+.card-grid .action-card:nth-child(2) .card-link{color:var(--green);}
+.card-grid .action-card:nth-child(3) .card-link{color:var(--purple);}
+.hero .accent-line{background:linear-gradient(90deg,var(--blue),var(--purple),var(--pink),var(--yellow));}
+.badge.blue{background:var(--blue-soft);color:var(--blue);}
+.badge.green{background:var(--green-soft);color:var(--green);}
+.badge.orange{background:var(--yellow-soft);color:#a66b00;}
+.badge.red{background:var(--red-soft);color:var(--red);}
+
+/* Role navigation colours */
+.utility-nav .nav-item:nth-child(1){--nav-c:var(--blue);--nav-bg:var(--blue-soft);}
+.utility-nav .nav-item:nth-child(2){--nav-c:var(--green);--nav-bg:var(--green-soft);}
+.utility-nav .nav-item:nth-child(3){--nav-c:var(--purple);--nav-bg:var(--purple-soft);}
+.utility-nav .nav-item:nth-child(4){--nav-c:var(--orange,#f9ab00);--nav-bg:var(--yellow-soft);}
+.utility-nav .nav-item:nth-child(5){--nav-c:var(--pink);--nav-bg:var(--pink-soft);}
+.utility-nav .utility-switch{--nav-c:var(--cyan);--nav-bg:var(--cyan-soft);}
+.utility-nav .nav-item{color:var(--nav-c,#5f6368);}
+.utility-nav .nav-item.active{color:var(--nav-c);background:var(--nav-bg);}
+.utility-nav .nav-item:hover,.utility-nav .utility-switch:hover{background:var(--nav-bg);color:var(--nav-c);}
+.utility-nav .utility-switch{color:var(--nav-c);}
+.utility-toggle{color:var(--blue);background:linear-gradient(145deg,rgba(232,240,254,.92),rgba(243,232,253,.9));}
+.utility-toggle .utility-dots i:nth-child(1){background:var(--blue);}
+.utility-toggle .utility-dots i:nth-child(2){background:var(--green);}
+.utility-toggle .utility-dots i:nth-child(3){background:var(--purple);}
+.utility-toggle .utility-dots i:nth-child(4){background:var(--pink);}
+.utility-search{color:var(--purple);background:rgba(243,232,253,.92);}
+
+body.dark{
+  --blue-soft:rgba(26,115,232,.20);--green-soft:rgba(30,142,62,.20);
+  --yellow-soft:rgba(249,171,0,.18);--red-soft:rgba(217,48,37,.18);
+  --purple-soft:rgba(147,52,230,.20);--cyan-soft:rgba(11,158,183,.20);--pink-soft:rgba(197,34,138,.20);
+}
+body.dark .btn-secondary{color:#c9a4ff;}
+body.dark .utility-toggle{background:linear-gradient(145deg,rgba(26,115,232,.24),rgba(147,52,230,.24));}
+
+/* Keep navigation square and fully visible at every portal size */
+.utility-nav-panel{width:320px;height:320px;overflow:visible;}
+.utility-nav .nav-pill{overflow:visible;}
+
+@media(max-width:420px){
+  .utility-nav-panel{width:min(300px,calc(100vw - 28px));height:min(300px,calc(100vw - 28px));}
+  .utility-nav .nav-text{font-size:11.5px;}
+}
+</style>
+<style id="material3-google-final">
+:root{
+  --m3-primary:#0B57D0;--m3-primary-container:#D3E3FD;--m3-surface:#FFFBFE;--m3-surface-container:#F8F9FA;
+  --m3-surface-variant:#E7E0EC;--m3-outline:#CAC4D0;--m3-on-surface:#1C1B1F;--m3-on-variant:#49454F;
+  --m3-error:#B3261E;--m3-error-container:#F9DEDC;--m3-green:#1E8E3E;--m3-green-container:#E6F4EA;
+  --m3-yellow:#E37400;--m3-yellow-container:#FEF7E0;--m3-red:#D93025;--m3-red-container:#FCE8E6;
+  --m3-blue:#1A73E8;--m3-blue-container:#E8F0FE;--m3-purple:#7627B8;--m3-purple-container:#F3E8FD;
+  --m3-shadow:0 1px 2px rgba(28,27,31,.10),0 2px 6px rgba(28,27,31,.08);
+  --m3-shadow-lg:0 8px 24px rgba(28,27,31,.14),0 2px 8px rgba(28,27,31,.08);
+  --m3-motion:cubic-bezier(.2,0,0,1);
+  --display:'Google Sans','Product Sans','Poppins',Inter,sans-serif;--body:'Roboto','Noto Sans','Segoe UI',Arial,sans-serif;
+  --bg:#F8F9FA;--surface:#FFFBFE;--surface-solid:#FFFFFF;--text:#1C1B1F;--muted:#49454F;--line:#CAC4D0;
+  --accent:#0B57D0;--accent-soft:#D3E3FD;--green:#1E8E3E;--orange:#E37400;--red:#D93025;--shadow:var(--m3-shadow-lg);--shadow-sm:var(--m3-shadow);
+}
+html,body{font-family:var(--body)!important;background:var(--bg)!important;color:var(--text)!important;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,input,select,textarea{font-family:var(--body)!important}
+.material-symbols-rounded{font-family:'Material Symbols Rounded'!important;font-weight:400;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+h1,h2,h3,h4,h5,h6,.login-title,.topbar h2,.eyebrow,.nav-text,.btn,.badge{font-family:var(--display)!important}
+h1,h2,h3,h4,h5,h6{color:var(--text);letter-spacing:-.02em}h1{font-size:clamp(34px,4vw,52px);line-height:1.08;font-weight:600}h2{font-size:clamp(26px,3vw,36px);line-height:1.15;font-weight:600}h3{font-size:20px;line-height:1.25;font-weight:600}.eyebrow{font-size:12px;line-height:1.3;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5F6368}.muted{color:#5F6368}.lead{font-size:16px;line-height:1.6}
+.shell,.login-page{background:var(--bg)!important}.shell::before{background:radial-gradient(circle at 16% 8%,rgba(66,133,244,.08),transparent 28%),radial-gradient(circle at 84% 18%,rgba(52,168,83,.05),transparent 25%)!important}.shell::after{background:none!important}
+.topbar{min-height:64px;margin-bottom:24px;padding:0 4px}.topbar-left{align-items:center}.back-btn{width:40px;height:40px;min-height:40px;padding:0;border:0;border-radius:50%;background:transparent;box-shadow:none;color:var(--m3-on-variant)}.back-btn:hover{background:rgba(68,67,73,.08);transform:none;box-shadow:none}.back-btn .nav-icon{font-size:22px}
+.card{background:#FFF!important;border:1px solid var(--m3-outline)!important;border-radius:12px!important;padding:16px!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.hero-main,.hero-side{background:#FFF!important;border:0!important;border-radius:16px!important;box-shadow:var(--m3-shadow)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.hero-main{padding:32px!important}.hero-side{padding:24px!important}.kpi{background:var(--m3-surface-container)!important;border:0!important;border-radius:12px!important;box-shadow:none!important;padding:16px!important}.action-card{min-height:220px;border-radius:12px!important;transition:transform 220ms var(--m3-motion),box-shadow 220ms var(--m3-motion)}.action-card:hover{transform:translateY(-2px);box-shadow:var(--m3-shadow)}.action-card:active{transform:scale(.99)}.action-card .icon-wrap{width:44px;height:44px;border-radius:12px;background:var(--m3-blue-container);color:var(--m3-primary);margin-bottom:16px}.card-grid .action-card:nth-child(2) .icon-wrap{background:var(--m3-green-container);color:var(--m3-green)}.card-grid .action-card:nth-child(3) .icon-wrap{background:var(--m3-purple-container);color:var(--m3-purple)}
+.btn{min-height:40px;height:40px;padding:0 20px;border-radius:20px!important;font-size:14px;font-weight:500;letter-spacing:.01em;box-shadow:none;transition:transform 120ms ease,background-color 180ms ease,box-shadow 180ms ease,opacity 120ms ease}.btn:hover{transform:none;box-shadow:var(--m3-shadow)}.btn:active{transform:scale(.97);opacity:.92;box-shadow:none}.btn-primary{background:var(--m3-primary)!important;color:#FFF!important;box-shadow:none!important}.btn-primary:hover{background:#0842A0!important}.btn-secondary{background:var(--m3-surface-container)!important;color:var(--m3-primary)!important;border:1px solid var(--m3-outline)!important}.btn-danger{background:var(--m3-error-container)!important;color:var(--m3-error)!important}.btn-ghost{background:transparent!important;color:var(--m3-primary)!important}.card-link{font-family:var(--body);color:var(--m3-primary);font-weight:500}
+.field{gap:6px}label{font-size:12px;font-weight:500;color:var(--m3-on-variant)}input,select,textarea{min-height:56px;background:#FFF!important;border:1px solid var(--m3-outline)!important;border-radius:4px!important;padding:16px!important;color:var(--text)!important;box-shadow:none!important}input:hover,select:hover,textarea:hover{border-color:#79747E!important;background:#FFF!important}input:focus,select:focus,textarea:focus{border:2px solid var(--m3-primary)!important;padding:15px!important;box-shadow:none!important;outline:none!important;transform:none!important}textarea{min-height:120px}
+.login-card .field{position:relative}.login-card .field>label{position:absolute;left:12px;top:-7px;z-index:2;padding:0 4px;background:#FFF;color:#5F6368;line-height:1.2}.login-card .field input{padding-top:16px!important}
+.list{gap:0}.list-item{min-height:56px;padding:8px 16px;border:0;border-bottom:1px solid var(--m3-surface-variant);border-radius:0;background:transparent}.list-item:hover,button.list-item:hover{transform:none;background:var(--m3-surface-container);box-shadow:none}.table-wrap{border:1px solid var(--m3-outline);border-radius:12px;background:#FFF;overflow:auto}th,td{padding:16px;border-bottom:1px solid var(--m3-surface-variant)}th{background:var(--m3-surface-container);font-size:12px;color:var(--m3-on-variant)}
+.badge{font-family:var(--body)!important;font-size:12px;font-weight:500;padding:6px 10px;border-radius:999px}.badge.blue{background:var(--m3-blue-container);color:var(--m3-primary)}.badge.green{background:var(--m3-green-container);color:var(--m3-green)}.badge.orange{background:var(--m3-yellow-container);color:#8A5100}.badge.red{background:var(--m3-red-container);color:var(--m3-red)}
+.utility-nav{width:64px!important;height:64px!important;left:50%!important;right:auto!important;top:auto!important;bottom:calc(env(safe-area-inset-bottom) + 20px)!important;transform:translateX(-50%)!important;z-index:200!important}.utility-toggle{width:64px!important;height:64px!important;border-radius:50%!important;border:1px solid var(--m3-outline)!important;background:#FFF!important;color:var(--m3-primary)!important;box-shadow:var(--m3-shadow-lg)!important;backdrop-filter:none!important}.utility-toggle:hover{transform:scale(1.02);background:var(--m3-primary-container)!important}.utility-toggle:active{transform:scale(.96)}.utility-nav-panel{width:320px!important;height:320px!important;bottom:78px!important;padding:8px!important;overflow:visible!important;transform:translate(-50%,20px) scale(.80)!important;opacity:0;visibility:hidden;pointer-events:none;transform-origin:center bottom;transition:transform 300ms var(--m3-motion),opacity 180ms ease,visibility 0s linear 300ms!important}.utility-nav.expanded .utility-nav-panel{transform:translate(-50%,0) scale(1)!important;opacity:1;visibility:visible;pointer-events:auto;transition:transform 300ms var(--m3-motion),opacity 150ms ease,visibility 0s linear 0s!important}.utility-nav .nav-pill{width:100%!important;height:100%!important;min-width:0!important;padding:10px!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:repeat(2,1fr)!important;gap:8px!important;background:#FFF!important;border:1px solid var(--m3-outline)!important;border-radius:20px!important;box-shadow:var(--m3-shadow-lg)!important;backdrop-filter:none!important}.utility-nav .nav-item,.utility-nav .utility-switch{min-width:0!important;min-height:0!important;width:100%!important;height:100%!important;padding:8px 5px!important;border:0!important;border-radius:14px!important;background:transparent!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:6px!important;color:var(--m3-on-variant)!important}.utility-nav .nav-item:hover,.utility-nav .utility-switch:hover{transform:none!important;background:var(--m3-surface-container)!important;color:var(--m3-primary)!important}.utility-nav .nav-item.active{background:var(--m3-primary-container)!important;color:var(--m3-primary)!important;box-shadow:none!important}.utility-nav .nav-text,.utility-nav .nav-switch-text{display:block!important;font-family:var(--body)!important;font-size:12px!important;font-weight:500!important;line-height:1.15!important;text-align:center!important;white-space:normal!important;overflow-wrap:anywhere}.utility-nav .nav-icon{font-size:24px!important;width:24px!important;height:24px!important}.utility-search{left:74px!important;bottom:6px!important;width:52px!important;height:52px!important;min-width:52px!important;background:#FFF!important;border:1px solid var(--m3-outline)!important;color:var(--m3-purple)!important;box-shadow:var(--m3-shadow-lg)!important}
+.login-page{min-height:100vh;padding:24px;background:#F8F9FA!important;place-items:center}.login-card{width:min(448px,100%)!important;padding:32px!important;background:#FFF!important;border:1px solid var(--m3-outline)!important;border-radius:28px!important;box-shadow:var(--m3-shadow)!important;backdrop-filter:none!important}.google-g{width:40px;height:40px;margin:0 0 20px;display:grid;place-items:center;border-radius:12px;font-family:var(--display);font-size:26px;font-weight:700;background:conic-gradient(from -45deg,#4285F4 0 25%,#34A853 25% 50%,#FBBC05 50% 75%,#EA4335 75% 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.login-title{font-size:24px!important;line-height:1.18!important;font-weight:500!important;margin-bottom:8px!important;color:var(--text)!important}.segmented{background:var(--m3-surface-container)!important;border:1px solid var(--m3-surface-variant);padding:4px!important;border-radius:20px!important;margin:20px 0!important}.segmented button{min-height:40px;border-radius:18px!important;font-family:var(--body)!important;font-weight:500!important}.segmented button.active{background:#FFF!important;color:var(--m3-primary)!important;box-shadow:var(--m3-shadow)!important}.auth-actions{border:1px solid var(--m3-outline)!important;background:#FFF!important;border-radius:20px!important;padding:0!important;overflow:hidden}.auth-actions .auth-action:first-child{border-right:1px solid var(--m3-outline)!important;border-radius:0!important}.auth-actions .auth-action:last-child{border-radius:0!important}.auth-action{min-height:40px;font-family:var(--body)!important;font-weight:500!important;color:var(--m3-primary)!important}.auth-action:hover{background:var(--m3-surface-container)!important;box-shadow:none!important;transform:none!important}
+.modal-backdrop{background:rgba(0,0,0,.32)!important;backdrop-filter:blur(8px)!important;-webkit-backdrop-filter:blur(8px)!important;animation:m3ScrimIn 150ms ease-out both!important}.modal{width:min(760px,100%)!important;border:1px solid var(--m3-outline)!important;border-radius:28px!important;background:#FFF!important;box-shadow:var(--m3-shadow-lg)!important;transform-origin:center!important;animation:m3DialogIn 300ms var(--m3-motion) both!important;backdrop-filter:none!important}.modal-head{min-height:64px;padding:16px 20px!important;background:#FFF!important;border-bottom:1px solid var(--m3-surface-variant)!important}.modal-body{padding:20px!important}.modal-close{width:40px!important;height:40px!important;border-radius:50%!important;background:transparent!important;color:var(--m3-on-variant)}.modal-close:hover{background:rgba(68,67,73,.08)!important;transform:none!important}.search-box,.search-results{border:1px solid var(--m3-outline)!important;border-radius:12px!important;background:var(--m3-surface-container)!important;box-shadow:none!important}.search-result{border:1px solid var(--m3-outline);border-radius:12px!important;background:#FFF!important;box-shadow:none!important}.search-result:hover{transform:none!important;box-shadow:var(--m3-shadow)!important}.quiz-option{border:1px solid var(--m3-outline);border-radius:12px!important;background:#FFF!important;min-height:48px}.quiz-option.selected{border-color:var(--m3-primary);background:var(--m3-blue-container)}.quiz-option.correct{border-color:var(--m3-green);background:var(--m3-green-container)}.quiz-option.wrong{border-color:var(--m3-red);background:var(--m3-red-container)}
+.reveal-ready{opacity:0;transform:translate3d(0,30px,0);transition:opacity 300ms var(--m3-motion),transform 300ms var(--m3-motion)!important;will-change:opacity,transform}.reveal-ready.revealed{opacity:1;transform:none}.view.m3-page-enter{animation:m3SharedAxisIn 300ms var(--m3-motion) both}.toast-root{position:fixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:calc(96px + env(safe-area-inset-bottom))!important;transform:translateX(-50%);width:min(520px,calc(100vw - 32px))!important;z-index:600}.toast{width:100%;min-height:48px;padding:12px 16px!important;border-radius:4px!important;background:#2D2F31!important;color:#FFF!important;box-shadow:var(--m3-shadow-lg)!important;backdrop-filter:none!important;animation:m3ToastIn 250ms cubic-bezier(0,0,0.2,1) both!important}.toast-leave{animation:m3ToastOut 200ms var(--m3-motion) both!important}.toast .message{font-size:13px;opacity:.92}.toast .dot{width:8px;height:8px;margin-top:6px}.toast.success .dot{background:#34A853!important}.toast.info .dot{background:#8AB4F8!important}.toast.warning .dot{background:#FBBC05!important}.toast.error .dot{background:#EA4335!important}.hero-main .accent-line{background:linear-gradient(90deg,#4285F4 0 48%,#34A853 48% 70%,#FBBC05 70% 84%,#EA4335 84%)!important}.utility-toggle .utility-dots i:nth-child(1){background:#4285F4!important}.utility-toggle .utility-dots i:nth-child(2){background:#34A853!important}.utility-toggle .utility-dots i:nth-child(3){background:#FBBC05!important}.utility-toggle .utility-dots i:nth-child(4){background:#EA4335!important}
+@media (max-width:760px){.view{padding:18px 16px calc(126px + env(safe-area-inset-bottom))!important}.topbar{min-height:56px;margin-bottom:16px}.hero-main{padding:24px!important;border-radius:16px!important}.hero-side{padding:20px!important}.card{padding:16px!important}.utility-nav-panel{width:min(320px,calc(100vw - 24px))!important;height:min(320px,calc(100vw - 24px))!important}.utility-nav .nav-text,.utility-nav .nav-switch-text{font-size:11px!important}.toast-root{bottom:calc(96px + env(safe-area-inset-bottom))!important;width:calc(100vw - 24px)!important}.modal-backdrop{padding:0!important;align-items:end!important}.modal{width:100%!important;max-height:90vh!important;border-radius:28px 28px 0 0!important;animation:m3SheetIn 350ms var(--m3-motion) both!important}.modal-head{border-radius:28px 28px 0 0}}
+@media (max-width:380px){.utility-nav-panel{width:calc(100vw - 20px)!important;height:calc(100vw - 20px)!important;bottom:76px!important}.utility-nav .nav-pill{gap:6px!important;padding:8px!important}.utility-nav .nav-item,.utility-nav .utility-switch{border-radius:12px!important;padding:5px 3px!important}.utility-nav .nav-text,.utility-nav .nav-switch-text{font-size:10px!important}}
+body.dark{--bg:#101014!important;--surface:#1C1B1F!important;--surface-solid:#1C1B1F!important;--surface-soft:#242329!important;--text:#E6E1E5!important;--muted:#CAC4D0!important;--line:#49454F!important;--accent:#A8C7FA!important;--accent-soft:#233044!important;--shadow:0 1px 2px rgba(0,0,0,.35),0 3px 10px rgba(0,0,0,.28)!important;--shadow-sm:0 1px 2px rgba(0,0,0,.35)!important}
+body.dark .card,body.dark .hero-main,body.dark .hero-side,body.dark .login-card,body.dark .modal,body.dark .modal-head,body.dark input,body.dark select,body.dark textarea,body.dark .search-result,body.dark .utility-nav .nav-pill{background:#1C1B1F!important;color:#E6E1E5!important}body.dark input,body.dark select,body.dark textarea{border-color:#79747E!important}body.dark .login-card .field>label{background:#1C1B1F!important;color:#CAC4D0!important}body.dark .kpi,body.dark .search-box,body.dark .search-results{background:#242329!important}body.dark .utility-toggle,body.dark .utility-search{background:#1C1B1F!important;border-color:#49454F!important}body.dark .utility-nav .nav-item.active{background:#304A6E!important;color:#A8C7FA!important}body.dark .utility-nav .nav-item:hover,body.dark .utility-nav .utility-switch:hover{background:#242329!important}body.dark .btn-secondary{background:#242329!important;color:#A8C7FA!important;border-color:#79747E!important}body.dark .auth-actions{background:#1C1B1F!important;border-color:#49454F!important}body.dark .auth-action{color:#A8C7FA!important}body.dark .segmented{background:#242329!important;border-color:#49454F!important}body.dark .segmented button.active{background:#1C1B1F!important;color:#A8C7FA!important}body.dark .modal-backdrop{background:rgba(0,0,0,.52)!important}body.dark .toast{background:#E6E1E5!important;color:#1C1B1F!important}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important;scroll-behavior:auto!important}.reveal-ready{opacity:1!important;transform:none!important}}
+@keyframes m3ScrimIn{from{opacity:0}to{opacity:1}}@keyframes m3DialogIn{from{opacity:0;transform:scale(.80)}to{opacity:1;transform:scale(1)}}@keyframes m3SheetIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}@keyframes m3SharedAxisIn{from{opacity:0;transform:translate3d(30px,0,0)}to{opacity:1;transform:none}}@keyframes m3ToastIn{from{opacity:0;transform:translate3d(0,80px,0)}to{opacity:1;transform:none}}@keyframes m3ToastOut{from{opacity:1;transform:none}to{opacity:0;transform:translate3d(0,80px,0)}}
+</style>
+
+<style id="portal-minimal-corrections">
+/* v18 focused Material 3 corrections: minimal portal headers, role switcher, cards and dock */
+.portal-header{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px;margin:0 0 24px;padding:0 2px}.portal-header h2{margin:0!important;font-family:var(--display)!important;font-size:clamp(26px,4vw,36px)!important;font-weight:600!important;letter-spacing:-.02em!important;color:var(--text)!important}.portal-avatar{width:44px;height:44px;min-width:44px;border:0;border-radius:50%;display:grid;place-items:center;background:var(--m3-primary);color:#fff;font-family:var(--display);font-size:18px;font-weight:600;box-shadow:var(--m3-shadow);cursor:pointer}.portal-avatar:hover{background:#0842A0}.portal-avatar:active{transform:scale(.96)}
+
+/* Authentication: no Google logo, title starts at the top of the card. */
+.login-card{padding-top:30px!important}.google-g{display:none!important}.login-title{display:block!important;margin:0 0 20px!important;text-align:left!important}.segmented{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;width:100%!important;overflow:hidden!important;padding:0!important;border:1px solid var(--m3-outline)!important;background:var(--m3-surface-container)!important;border-radius:20px!important}.segmented button{width:100%!important;min-width:0!important;min-height:48px!important;margin:0!important;border-radius:0!important;border-right:1px solid var(--m3-outline)!important;background:transparent!important;color:var(--m3-on-variant)!important;padding:0 8px!important;font-size:14px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important}.segmented button:last-child{border-right:0!important}.segmented button.active{background:var(--m3-primary-container)!important;color:var(--m3-primary)!important;box-shadow:none!important}.auth-actions{margin-top:16px!important}
+
+/* Material KPI cards: clear click targets and enough contrast in both themes. */
+.grid-4,.portal-kpis{gap:12px!important}.kpi-link{display:block!important;width:100%!important;text-align:left!important;cursor:pointer!important;appearance:none!important;font:inherit!important;color:var(--text)!important;transition:transform 180ms var(--m3-motion),box-shadow 180ms var(--m3-motion),background-color 180ms ease!important}.kpi-link:hover{transform:translateY(-2px)!important;box-shadow:var(--m3-shadow)!important;background:#fff!important}.kpi-link:active{transform:scale(.985)!important}.kpi .label{color:var(--m3-on-variant)!important;font-family:var(--body)!important;font-size:14px!important;font-weight:500!important;margin-top:10px}.kpi .value{color:var(--text)!important;font-family:var(--display)!important;font-size:34px!important;font-weight:600!important;line-height:1.1!important;margin-top:6px}.kpi-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center}.kpi-icon .material-symbols-rounded{font-size:21px}.kpi-blue{background:var(--m3-blue-container);color:var(--m3-primary)}.kpi-green{background:var(--m3-green-container);color:var(--m3-green)}.kpi-purple{background:var(--m3-purple-container);color:var(--m3-purple)}.kpi-yellow{background:var(--m3-yellow-container);color:#8A5100}.kpi-red{background:var(--m3-red-container);color:var(--m3-red)}
+
+/* Keep the dock truly bottom-centred; expanded square is fully visible above it. */
+.utility-nav{left:50%!important;right:auto!important;top:auto!important;bottom:max(24px,calc(env(safe-area-inset-bottom) + 24px))!important;transform:translate3d(-50%,0,0)!important;width:64px!important;height:64px!important;overflow:visible!important}.utility-toggle{left:0!important;bottom:0!important}.utility-nav-panel{left:50%!important;bottom:78px!important;width:min(312px,calc(100vw - 24px))!important;height:min(312px,calc(100vw - 24px))!important;padding:8px!important;overflow:visible!important}.utility-nav .nav-pill{width:100%!important;height:100%!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;gap:6px!important;padding:8px!important}.utility-nav .nav-item,.utility-nav .utility-switch{min-width:0!important;min-height:0!important;padding:6px 4px!important;gap:5px!important;border-radius:12px!important}.utility-nav .nav-text,.utility-nav .nav-switch-text{font-size:11px!important;line-height:1.12!important}.utility-nav .nav-icon{width:22px!important;height:22px!important;font-size:22px!important}.utility-search{left:76px!important;bottom:6px!important}
+
+/* Light/dark text synchronization. */
+body.dark .portal-header h2,body.dark .kpi-link,body.dark .kpi .value{color:#F1F3F4!important}body.dark .kpi{background:#242329!important}body.dark .kpi .label{color:#C4C7C5!important}body.dark .kpi-link:hover{background:#2C2D33!important}body.dark .segmented{background:#242329!important;border-color:#5F6368!important}body.dark .segmented button{color:#E8EAED!important;border-color:#5F6368!important}body.dark .segmented button.active{background:#304A6E!important;color:#A8C7FA!important}body.dark .login-title{color:#F1F3F4!important}body.dark .portal-avatar{background:#A8C7FA!important;color:#0B1B33!important}body.dark .utility-nav .nav-pill{background:#1C1B1F!important;border-color:#5F6368!important}body.dark .utility-nav .nav-item,body.dark .utility-nav .utility-switch{color:#E8EAED!important}body.dark .utility-nav .nav-item.active{background:#304A6E!important;color:#A8C7FA!important}body.dark .utility-toggle{background:#1C1B1F!important;color:#A8C7FA!important;border-color:#5F6368!important}.portal-header + .grid-4,.portal-header + .portal-kpis{margin-top:0}
+
+@media(max-width:760px){.portal-header{min-height:52px;margin-bottom:18px}.portal-header h2{font-size:28px!important}.portal-avatar{width:42px;height:42px;min-width:42px}.login-card{padding:24px!important}.segmented button{font-size:13px!important;padding:0 5px!important}.grid-4{grid-template-columns:1fr 1fr!important}.portal-kpis{grid-template-columns:1fr 1fr!important}.utility-nav{bottom:max(28px,calc(env(safe-area-inset-bottom) + 28px))!important}.utility-nav-panel{bottom:76px!important;width:min(300px,calc(100vw - 20px))!important;height:min(300px,calc(100vw - 20px))!important}.utility-nav .nav-text,.utility-nav .nav-switch-text{font-size:10.5px!important}}
+@media(max-width:350px){.segmented button{font-size:12px!important}.utility-nav-panel{width:286px!important;height:286px!important}.utility-nav .nav-text,.utility-nav .nav-switch-text{font-size:10px!important}}
+
+
+/* v19 requested correction: clear outlined home KPI cards + aligned User search control. */
+.kpi-link{
+  border:1.5px solid var(--m3-outline)!important;
+  border-radius:28px!important;
+  background:var(--m3-surface-container)!important;
+  box-shadow:none!important;
+  overflow:hidden;
+}
+.kpi-link:hover{
+  border-color:var(--m3-primary)!important;
+  box-shadow:none!important;
+}
+body.dark .kpi-link{
+  border-color:#5F6368!important;
+  background:#242329!important;
+}
+body.dark .kpi-link:hover{
+  border-color:#8AB4F8!important;
+  background:#2C2D33!important;
+}
+
+/* User-only Search: same 64px size as the Utilities button, vertically aligned,
+   and fixed immediately to its right with an 8px gap. */
+.utility-search{
+  position:absolute!important;
+  left:calc(100% + 8px)!important;
+  top:0!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:64px!important;
+  min-width:64px!important;
+  height:64px!important;
+  min-height:64px!important;
+  margin:0!important;
+  padding:0!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+}
+.utility-search .nav-icon{
+  width:24px!important;
+  height:24px!important;
+}
+@media(max-width:380px){
+  .utility-search{
+    left:calc(100% + 6px)!important;
+  }
+}
+</style>
+</head>
+<body>
+  <div id="app" class="app"></div>
+  <div id="modal-root"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite" aria-atomic="true"></div>
+  <script>
+(function(){
+  'use strict';
+
+  const STORAGE = 'cyber_portal_v1';
+  const THEME_KEY = 'cyber_portal_theme';
+  const SESSION_KEY = 'cyber_portal_session';
+
+  const awareness = [
+    {id:'phishing', title:'Phishing & Suspicious Links', keywords:['phishing','suspicious link','fake message','email','sms'],
+      desc:'Recognize deceptive messages and links that try to steal sensitive information.',
+      body:'Phishing is an attempt to trick a person into revealing sensitive information by pretending to be a trusted person, company, service, or institution.',
+      tips:['Be cautious with unexpected emails, SMS messages, social-media messages, and links.','Check the sender and the website address before entering credentials.','Do not enter passwords, OTPs, card details, or banking information on a page reached through a suspicious link.','Do not assume a message is genuine merely because it uses a familiar logo or name.','When in doubt, open the organization\'s official website or app directly instead of using the received link.']},
+    {id:'upi', title:'UPI & Online Payment Safety', keywords:['upi','payment','qr','otp','online payment'],
+      desc:'Learn how payment requests, QR tricks, impersonation, and remote-access scams work.',
+      body:'Online payment fraud can involve fake payment requests, impersonation, QR-code tricks, remote-access scams, and requests for confidential banking information.',
+      tips:['Never share your UPI PIN or OTP with another person.','Remember that entering a UPI PIN is generally used to authorize a payment, not to receive money.','Verify the recipient and amount before approving a transaction.','Do not install remote-access applications because an unknown caller asks you to.','If an unauthorized transaction occurs, contact the relevant bank or payment service promptly and preserve transaction evidence.']},
+    {id:'passwords', title:'Password & Account Security', keywords:['password','security pin','mfa','authentication','account'],
+      desc:'Protect your important online accounts with stronger authentication habits.',
+      body:'Strong account security reduces the risk of unauthorized access to email, social-media, financial, and other online accounts.',
+      tips:['Use long, unique passwords or passphrases for important accounts.','Do not reuse the same password across multiple important services.','Enable multi-factor authentication where available.','Never share passwords, security PINs, or authentication codes with others.','Review account recovery information and security settings periodically.']},
+    {id:'social', title:'Social Media Safety', keywords:['social media','instagram','whatsapp','facebook','harassment','fake profile'],
+      desc:'Reduce the risk of impersonation, phishing, harassment, malicious links, and account takeover.',
+      body:'Social-media accounts can be targeted through impersonation, phishing, fake profiles, harassment, malicious links, and account takeover attempts.',
+      tips:['Use privacy settings appropriate to the information you want to share.','Avoid publishing sensitive personal information publicly.','Be careful when accepting requests from unknown accounts.','Do not share authentication codes or recovery links.','Block and report suspicious or abusive accounts and preserve evidence when necessary.']},
+    {id:'identity', title:'Identity Theft & Impersonation', keywords:['identity theft','impersonation','personal information','id'],
+      desc:'Understand how personal information can be misused for impersonation or unauthorized access.',
+      body:'Identity theft occurs when someone uses another person\'s personal information without authorization, often to impersonate them or gain access to services.',
+      tips:['Limit the amount of personal information shared publicly.','Treat identity documents and personal identifiers as sensitive information.','Be cautious when someone urgently asks for personal or financial details.','Monitor important accounts for unusual activity.','Report suspected misuse and keep copies of relevant evidence.']},
+    {id:'cyberbullying', title:'Cyberbullying, Harassment & Online Abuse', keywords:['cyberbullying','harassment','abuse','threat','online abuse'],
+      desc:'Know how to respond to repeated threats, abusive messages, impersonation, or harmful content.',
+      body:'Cyberbullying and online harassment can include repeated threats, abusive messages, impersonation, humiliation, or harmful content distributed through digital platforms.',
+      tips:['Do not respond impulsively to threatening or abusive messages.','Use platform tools to block and report abusive accounts.','Preserve screenshots, messages, URLs, usernames, and dates when evidence is needed.','Review privacy settings and limit unwanted contact.','Seek help from a trusted person or appropriate authority when there is a serious threat or continuing abuse.']},
+    {id:'malware', title:'Malware & Unsafe Downloads', keywords:['malware','apk','download','virus','unsafe file'],
+      desc:'Learn how malicious software can disrupt devices, steal data, or perform unauthorized actions.',
+      body:'Malware is malicious software designed to disrupt devices, steal information, spy on users, or perform unauthorized actions.',
+      tips:['Download software from trusted and legitimate sources.','Avoid pirated applications, unknown APKs, and suspicious attachments.','Keep the operating system, browser, and security software updated.','Do not disable security protections simply because an unknown website or application requests it.','Be cautious with files received unexpectedly through email or messaging apps.']},
+    {id:'fake-sites', title:'Fake Websites, Apps & Online Scams', keywords:['fake website','fake app','scam','support scam','domain'],
+      desc:'Spot websites, apps, advertisements, or support accounts that imitate legitimate services.',
+      body:'Fraudsters may create websites, applications, advertisements, or support accounts that imitate legitimate services.',
+      tips:['Check the domain name carefully for unusual spelling or extra characters.','Do not trust claims based only on logos, branding, or urgent language.','Avoid making payments through unknown websites.','Use official app stores and official websites whenever possible.','Verify customer-support contact information independently.']},
+    {id:'wifi', title:'Public Wi-Fi & Device Safety', keywords:['wifi','public wifi','device security','screen lock'],
+      desc:'Reduce privacy and security risks when using shared networks or devices in public places.',
+      body:'Public or shared networks can create additional privacy and security risks, especially when users access sensitive services.',
+      tips:['Avoid performing highly sensitive transactions on untrusted networks when possible.','Use HTTPS websites and keep your device software updated.','Turn off automatic connection to unknown Wi-Fi networks.','Do not leave devices unlocked in public places.','Use screen locks and device security features.']},
+    {id:'after-crime', title:'What to Do After a Cybercrime', keywords:['after cybercrime','victim','evidence','report','recovery'],
+      desc:'Immediate steps for preserving evidence, securing accounts, and using appropriate reporting channels.',
+      body:'A victim should act quickly, preserve evidence, and use appropriate reporting or support channels rather than deleting potentially useful information.',
+      tips:['Stay calm and stop interacting with the suspected attacker.','Preserve screenshots, messages, transaction records, URLs, usernames, phone numbers, and other relevant evidence.','Secure affected accounts by changing passwords and enabling additional security where appropriate.','Contact the relevant bank, payment provider, platform, or service if an account or transaction is affected.','Use the appropriate official cybercrime reporting channel or law-enforcement process for the situation.','Keep the complaint/reference number and follow its progress through the portal when applicable.']},
+    {id:'social-engineering', title:'Social Engineering & Scam Calls', keywords:['social engineering','scam call','phone scam','impersonation call','urgent call'],
+      desc:'Recognize manipulation tactics used in calls and messages that create urgency, fear, or false trust.',
+      body:'Social engineering uses human interaction and psychological pressure to persuade people to reveal information, approve transactions, install software, or take an unsafe action.',
+      tips:['Be cautious when someone creates urgency or threatens immediate consequences.','Do not share OTPs, passwords, UPI PINs, security codes, or confidential documents during unsolicited calls.','End the call and contact the organization through an independently verified official number.','Do not install remote-access software because an unknown caller asks you to.','Report suspected scams and preserve the call details, messages, numbers, and transaction records.']},
+    {id:'device-browser', title:'Device & Browser Security', keywords:['device security','browser security','updates','software update','browser'],
+      desc:'Keep phones and computers safer through updates, secure settings, and careful browser habits.',
+      body:'Devices and browsers are common targets for malicious software, unsafe extensions, fraudulent downloads, and account theft.',
+      tips:['Install operating-system and browser updates from trusted sources.','Use a screen lock and enable device security features.','Review installed browser extensions and remove those you do not need or recognize.','Avoid installing software from unknown websites or unofficial sources.','Back up important data and use reputable security protections where appropriate.']},
+  ];
+
+  const quizQuestions = [
+    {q:'You receive a message asking you to click a link and enter your bank password immediately. What should you do?', options:['Click the link and enter the password','Forward the message to friends','Avoid the link and verify the request through the official bank website/app','Reply with your password'], answer:2, explanation:'Suspicious links and urgent requests are common phishing techniques. Verify through an official channel instead.'},
+    {q:'Someone says they need your UPI PIN to send money to your account. What should you do?', options:['Share the UPI PIN','Share only half of the PIN','Never share the UPI PIN','Send the PIN through email'], answer:2, explanation:'A UPI PIN is confidential and should not be shared with another person.'},
+    {q:'Which is the safest password practice?', options:['Use the same password everywhere','Use your name and birth year','Use a unique, strong password for important accounts','Share your password with a friend'], answer:2, explanation:'Unique, strong passwords reduce the impact of a password compromise on other accounts.'},
+    {q:'You receive an unexpected attachment from an unknown sender. What is the safest response?', options:['Open it immediately','Download it and disable security software','Verify the sender and avoid opening it if it is suspicious','Forward it to another person'], answer:2, explanation:'Unexpected attachments can contain malicious files. Verify before opening anything.'},
+    {q:'What should you do if someone is repeatedly harassing you online?', options:['Delete all evidence immediately','Preserve evidence and use blocking/reporting tools','Share your password with them','Send them your personal documents'], answer:1, explanation:'Preserving evidence can help with reporting, while blocking and reporting can reduce further contact.'},
+    {q:'Which action is safest when accessing an important service?', options:['Use a link from an unknown message','Search for or directly open the service\'s official website/app','Use a random website with the same logo','Enter credentials into any page that asks for them'], answer:1, explanation:'Using the official website or app directly reduces the risk of being redirected to a fake login page.'},
+    {q:'You notice an unauthorized online transaction. What should you do?', options:['Ignore it','Delete all transaction messages','Contact the relevant bank/payment provider promptly and preserve evidence','Share your OTP publicly'], answer:2, explanation:'Quick reporting and preservation of transaction evidence can help with response and investigation.'},
+    {q:'Which is a warning sign of a possible fake website?', options:['Carefully checked official domain','Normal navigation','Unusual spelling or a suspicious domain name','Official app-store listing'], answer:2, explanation:'Look carefully at the domain name and other signs before entering sensitive information.'},
+    {q:'What should you do with a suspicious social-media account pretending to be someone you know?', options:['Send it personal information','Trust it because the profile photo looks familiar','Verify the person\'s identity through another trusted channel and report the fake account if appropriate','Give it your OTP'], answer:2, explanation:'Impersonation accounts can be used for fraud. Verify identity independently.'},
+    {q:'What is useful evidence to preserve after a cybercrime incident?', options:['Only your memory','Screenshots, messages, transaction details, URLs, usernames, dates, and other relevant records','Nothing','Only the attacker\'s profile picture'], answer:1, explanation:'A detailed evidence record can help explain what happened and support the reporting/investigation process.'}
+  ];
+
+  const STATUS_OPTIONS = ['Pending','In Progress','Solved','Dismissed'];
+
+  const DEFAULT = {
+    users: [],
+    officers: [
+      {id:'off-omkar', name:'Omkar Chopade', post:'Cybercrime Investigation Officer', officerId:'OFF-001', username:'omkar', email:'omkar@cybercrime.gov.in', mobile:'9873412056', address:'Cyber Crime Branch, 3rd Floor, Government Polytechnic, Pune', password:'Officer@123', pin:'123456', active:true},
+      {id:'off-shreetej', name:'Shreetej Rokade', post:'Cybercrime Investigation Officer', officerId:'OFF-002', username:'shreetej', email:'shreetej@cybercrime.gov.in', mobile:'8765093142', address:'Cyber Crime Branch, 3rd Floor, Government Polytechnic, Pune', password:'Officer@123', pin:'123456', active:true},
+      {id:'off-pranjal', name:'Pranjal Shinde', post:'Cybercrime Investigation Officer', officerId:'OFF-003', username:'pranjal', email:'pranjal@cybercrime.gov.in', mobile:'7652984310', address:'Cyber Crime Branch, 3rd Floor, Government Polytechnic, Pune', password:'Officer@123', pin:'123456', active:true},
+      {id:'off-siddharth', name:'Siddharth Shinde', post:'Cybercrime Investigation Officer', officerId:'OFF-004', username:'siddharth', email:'siddharth@cybercrime.gov.in', mobile:'9347152608', address:'Cyber Crime Branch, 3rd Floor, Government Polytechnic, Pune', password:'Officer@123', pin:'123456', active:true}
+    ],
+    admins: [{id:'admin-1', name:'Administrator', username:'admin', email:'admin@example.local', password:'Admin@123', pin:'999999', active:true}],
+    complaints: [],
+    awareness,
+    quizResults: [],
+    settings: {theme:'light'}
+  };
+
+  function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+  function normalizeStatus(status){
+    if(STATUS_OPTIONS.includes(status)) return status;
+    if(status==='Registered'||status==='Assigned'||status==='Under Review') return 'Pending';
+    if(status==='Under Process'||status==='Investigation'||status==='Action Taken') return 'In Progress';
+    if(status==='Resolved'||status==='Closed') return 'Solved';
+    return 'Pending';
+  }
+  function normalizeDB(db){
+    db.users = Array.isArray(db.users) ? db.users : [];
+    db.officers = Array.isArray(db.officers) ? db.officers : [];
+    db.admins = Array.isArray(db.admins) ? db.admins : clone(DEFAULT.admins);
+    db.complaints = Array.isArray(db.complaints) ? db.complaints : [];
+    db.quizResults = Array.isArray(db.quizResults) ? db.quizResults : [];
+    db.settings = db.settings || {theme:'light'};
+    db.awareness = Array.isArray(db.awareness) ? db.awareness : clone(awareness);
+    // Replace/refresh the built-in awareness catalog while preserving any administrator-created articles.
+    const builtInById = Object.fromEntries(awareness.map(a=>[a.id,a]));
+    const custom = db.awareness.filter(a=>!builtInById[a.id]);
+    db.awareness = [...clone(awareness), ...custom];
+    db.users.forEach(u=>{u.active = u.active!==false; u.address=u.address||''; u.mobile=u.mobile||'';});
+    db.officers.forEach(o=>{o.active=o.active!==false; o.address=o.address||''; o.mobile=o.mobile||''; o.post=o.post||'Cybercrime Investigation Officer';});
+    // Keep the four built-in officer profiles consistent across fresh and previously stored demo data.
+    const builtInOfficerProfiles = {
+      'off-omkar': {username:'omkar', email:'omkar@cybercrime.gov.in', mobile:'9873412056', password:'Officer@123', pin:'123456', address:'Cyber Crime Branch, 3rd Floor, Government Polytechnic, Pune'},
+      'off-shreetej': {username:'shreetej', email:'shreetej@cybercrime.gov.in', mobile:'8765093142', password:'Officer@123', pin:'123456', address:'Cyber Crime Branch, 3rd Floor, Government Polytechnic, Pune'},
+      'off-pranjal': {username:'pranjal', email:'pranjal@cybercrime.gov.in', mobile:'7652984310', password:'Officer@123', pin:'123456', address:'Cyber Crime Branch, 3rd Floor, Government Polytechnic, Pune'},
+      'off-siddharth': {username:'siddharth', email:'siddharth@cybercrime.gov.in', mobile:'9347152608', password:'Officer@123', pin:'123456', address:'Cyber Crime Branch, 3rd Floor, Government Polytechnic, Pune'}
+    };
+    db.officers.forEach(o=>{
+      const profile=builtInOfficerProfiles[o.id];
+      if(profile) Object.assign(o, profile);
+    });
+    db.admins.forEach(a=>{a.active=a.active!==false; a.address=a.address||''; a.mobile=a.mobile||''; a.post=a.post||'Administrator';});
+    db.complaints.forEach(c=>{
+      c.status = normalizeStatus(c.status);
+      c.history = Array.isArray(c.history) ? c.history : [{status:c.status,finding:'',remarks:'Complaint recorded.',at:c.createdAt||new Date().toISOString()}];
+      c.history = c.history.map(h=>({...h,status:normalizeStatus(h.status)}));
+      c.evidence = Array.isArray(c.evidence) ? c.evidence : [];
+      c.assignedOfficerId = c.assignedOfficerId || null;
+      c.updatedAt = c.updatedAt || c.createdAt || new Date().toISOString();
+    });
+    return db;
+  }
+  function loadDB(){
+    let db;
+    try { db = JSON.parse(localStorage.getItem(STORAGE) || 'null'); } catch(e){ db=null; }
+    if(!db){
+      try { db = JSON.parse(localStorage.getItem('cyber_portal_v1') || 'null'); } catch(e){ db=null; }
+    }
+    if(!db) db=clone(DEFAULT);
+    db=normalizeDB(db);
+    localStorage.setItem(STORAGE, JSON.stringify(db));
+    return db;
+  }
+  function saveDB(db){ localStorage.setItem(STORAGE, JSON.stringify(db)); }
+  function loadSession(){ try{return JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch(e){return null;} }
+  function saveSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
+  function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+
+  const loadedSession=loadSession();
+  const state={ db:loadDB(), session:loadedSession, page:loadedSession?.role==='admin'?'dashboard':'home', userRole:'user', history:[] };
+  document.body.classList.toggle('dark', (state.db.settings?.theme||'light')==='dark');
+
+  function esc(value){ return String(value??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function uid(prefix){ return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`; }
+  function fmtDate(v){ return new Date(v).toLocaleString(undefined,{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}); }
+  function complaintId(){ return `CYB-${new Date().getFullYear()}-${String(state.db.complaints.length+1).padStart(5,'0')}`; }
+  function currentAccount(){
+    if(!state.session) return null;
+    const group = state.session.role==='user'?'users':state.session.role==='officer'?'officers':'admins';
+    return state.db[group].find(x=>x.id===state.session.id)||null;
+  }
+  function initials(name=''){ return name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase()||'?'; }
+
+  function icon(name){
+    const symbols={home:'home',report:'report_problem',track:'timeline',awareness:'shield',user:'person',settings:'settings',search:'search',chart:'bar_chart',users:'group',officer:'verified_user',plus:'add',switch:'switch_account',info:'info',logout:'logout',lock:'lock',sun:'light_mode',moon:'dark_mode',check:'check',close:'close',back:'arrow_back',eye:'visibility',play:'play_arrow',edit:'edit',trash:'delete',paperclip:'attach_file'};
+    return `<span class="material-symbols-rounded nav-icon" aria-hidden="true">${symbols[name]||'info'}</span>`;
+  }
+
+  function navForRole(role){
+    /* Five icon items maximum. Switch Account is a text action inside the same expandable utility bar. */
+    if(role==='user') return [
+      ['home','Home','home'],['report','Report','report'],['track','Track','track'],['awareness','Awareness','awareness'],['settings','Settings','settings']
+    ];
+    if(role==='officer') return [
+      ['dashboard','Dashboard','chart'],['users','Users','users'],['mine','Cases','track'],['update','Update','edit'],['settings','Settings','settings']
+    ];
+    return [
+      ['dashboard','Dashboard','chart'],['complaints','Complaints','report'],['allocation','Allocate','plus'],['users','Users','users'],['settings','Settings','settings']
+    ];
+  }
+  function rootPageForRole(role){ return role==='admin' ? 'dashboard' : 'home'; }
+  function go(page, fromPopState=false){
+    if(page==='awareness' && state.session?.role!=='user') page='dashboard';
+    if(page===state.page && !fromPopState) return;
+    state.history = Array.isArray(state.history) ? state.history : [];
+    if(!fromPopState){
+      state.history.push(state.page);
+      try { window.history.pushState({portalPage:page},'',`#${encodeURIComponent(page)}`); } catch(e) {}
+    }
+    state.page=page; render(); window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function goBack(fromPopState=false){
+    state.history = Array.isArray(state.history) ? state.history : [];
+    if(!fromPopState){
+      if(state.history.length){
+        try { window.history.back(); return; } catch(e) {}
+        state.page=state.history.pop();
+      } else { state.page=rootPageForRole(state.session?.role); }
+    } else if(state.history.length){
+      state.page=state.history.pop();
+    } else {
+      state.page=rootPageForRole(state.session?.role);
+    }
+    render(); window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function showToast(message, type='success', title=''){ 
+    const root=document.getElementById('toast-root');
+    const el=document.createElement('div'); el.className=`toast ${type}`;
+    el.innerHTML=`<span class="dot"></span><div><div class="title">${esc(title||({success:'Success',error:'Error',warning:'Warning',info:'Info'}[type]||'Notice'))}</div><div class="message">${esc(message)}</div></div>`;
+    root.appendChild(el); setTimeout(()=>{el.classList.add('toast-leave'); setTimeout(()=>el.remove(),200);},3800);
+  }
+
+  function openModal(title, body, options={}){
+    const root=document.getElementById('modal-root');
+    root.innerHTML=`<div class="modal-backdrop" data-close-modal>
+      <div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+        <div class="modal-head"><div><div class="eyebrow">${esc(options.eyebrow||'')}</div><h3>${esc(title)}</h3></div><button class="modal-close" data-modal-close aria-label="Close">${icon('close')}</button></div>
+        <div class="modal-body">${body}</div>
+      </div>
+    </div>`;
+    root.querySelector('[data-modal-close]').onclick=()=>closeModal();
+    root.querySelector('[data-close-modal]').addEventListener('click',e=>{if(e.target.dataset.closeModal!==undefined) closeModal();});
+    return root.querySelector('.modal');
+  }
+  function closeModal(){ document.getElementById('modal-root').innerHTML=''; }
+
+  function render(){
+    state.db=loadDB();
+    document.body.classList.toggle('dark',(state.db.settings?.theme||'light')==='dark');
+    const app=document.getElementById('app');
+    if(!state.session){ renderLogin(app); return; }
+    renderShell(app);
+  }
+
+  function renderLogin(app){
+    app.innerHTML=`<div class="login-page">
+      <div class="login-card">
+        <h2 class="login-title">Cybercrime Reporting & Awareness Portal</h2>
+        <div class="segmented" id="login-seg">
+          <button data-role="user" class="active">User</button>
+          <button data-role="officer">Officer</button>
+          <button data-role="admin">Administrator</button>
+        </div>
+        <form id="login-form" class="auth-form">
+          <div class="field"><label>Username / Email / Mobile</label><input required id="login-id" autocomplete="username" /></div>
+          <div class="field" style="margin-top:12px"><label>Password</label><input required type="password" id="login-password" autocomplete="current-password" /></div>
+          <button class="btn btn-primary" style="width:100%;margin-top:16px">Log In</button>
+        </form>
+        <div class="auth-actions" id="auth-foot"><button class="auth-action" type="button" id="register-link">Create Account</button><button class="auth-action" type="button" id="forgot-link">Forgot Password</button></div>
+      </div>
+    </div>`;
+
+    let role='user';
+    const seg=document.getElementById('login-seg');
+    seg.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{
+      seg.querySelectorAll('button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); role=btn.dataset.role;
+      document.getElementById('auth-foot').innerHTML = role==='user' ? `<button class="auth-action" type="button" id="register-link">Create Account</button><button class="auth-action" type="button" id="forgot-link">Forgot Password</button>` : `<button class="auth-action auth-action-full" type="button" id="forgot-link">Forgot Password</button>`;
+      bindAuthFoot();
+    }));
+    function bindAuthFoot(){
+      const r=document.getElementById('register-link'); if(r) r.onclick=()=>registerModal();
+      const f=document.getElementById('forgot-link'); if(f) f.onclick=()=>forgotPasswordModal(role);
+    }
+    bindAuthFoot();
+    document.getElementById('login-form').onsubmit=(e)=>{
+      e.preventDefault();
+      const ident=document.getElementById('login-id').value.trim(); const pass=document.getElementById('login-password').value;
+      const group=role==='user'?'users':role==='officer'?'officers':'admins';
+      const account=state.db[group].find(a=>a.username===ident||a.email===ident||a.mobile===ident||a.officerId===ident);
+      if(!account||account.password!==pass||account.active===false){ showToast('Invalid username or password.','error'); return; }
+      state.session={role: role==='admin'?'admin':role, id:account.id}; saveSession(state.session); state.page=role==='admin'?'dashboard':'home'; state.history=[]; showToast('Logged in successfully.','success'); render();
+    };
+  }
+
+  function registerModal(){
+    const modal=openModal('Create a user account',`<form id="register-form" class="form-grid">
+      <div class="field"><label>Full Name</label><input id="r-name" required autocomplete="name"></div>
+      <div class="field"><label>Username</label><input id="r-user" required autocomplete="username"></div>
+      <div class="field"><label>Email ID</label><input id="r-email" type="email" required autocomplete="email"></div>
+      <div class="field"><label>Password</label><input id="r-pass" type="password" required autocomplete="new-password"></div>
+      <div class="field"><label>Confirm Password</label><input id="r-pass2" type="password" required autocomplete="new-password"></div>
+      <div class="field"><label>Account Recovery PIN (6 digits)</label><input id="r-pin" inputmode="numeric" maxlength="6" minlength="6" pattern="[0-9]{6}" required autocomplete="off"></div>
+      <div class="field"><label>Address <span class="small muted">(optional)</span></label><input id="r-address" autocomplete="street-address"></div>
+      <div class="field full"><div class="helper">Use a six-digit numeric PIN for account recovery. The PIN is never shown after account creation.</div></div>
+      <div class="field full"><button class="btn btn-primary">Create Account</button></div>
+    </form>`);
+    const pin=modal.querySelector('#r-pin');
+    pin.addEventListener('input',()=>{pin.value=pin.value.replace(/\D/g,'').slice(0,6);});
+    modal.querySelector('#register-form').onsubmit=(e)=>{
+      e.preventDefault();
+      const f=id=>modal.querySelector(id).value.trim();
+      const pinValue=f('#r-pin');
+      if(f('#r-pass')!==f('#r-pass2')) return showToast('Passwords do not match.','error');
+      if(!/^\d{6}$/.test(pinValue)) return showToast('Account Recovery PIN must contain exactly 6 digits.','error');
+      if(state.db.users.some(u=>u.username.toLowerCase()===f('#r-user').toLowerCase()||u.email.toLowerCase()===f('#r-email').toLowerCase())) return showToast('Username or email already exists.','error');
+      const newUser={id:uid('user'),name:f('#r-name'),username:f('#r-user'),email:f('#r-email'),mobile:'',address:f('#r-address'),password:f('#r-pass'),pin:pinValue,active:true};
+      state.db.users.push(newUser);
+      saveDB(state.db);
+      state.session={role:'user',id:newUser.id};
+      saveSession(state.session);
+      state.page='home'; state.history=[];
+      closeModal(); showToast('Account created successfully.','success');
+      setTimeout(render,30);
+    };
+  }
+  function forgotPasswordModal(role='user'){
+    const modal=openModal('Account recovery',`<form id="recovery-form" class="form-grid">
+      <div class="field full"><label>Username / Email / Mobile</label><input id="f-ident" required></div>
+      <div class="field full"><label>6-digit Security PIN</label><input id="f-pin" maxlength="6" minlength="6" inputmode="numeric" pattern="[0-9]{6}" required></div>
+      <div class="field"><label>New Password</label><input id="f-pass" type="password" required></div>
+      <div class="field"><label>Confirm New Password</label><input id="f-pass2" type="password" required></div>
+      <div class="field full"><button class="btn btn-primary">Recover Account</button></div>
+    </form>`);
+    const pin=modal.querySelector('#f-pin'); pin.addEventListener('input',()=>{pin.value=pin.value.replace(/\D/g,'').slice(0,6);});
+    modal.querySelector('#recovery-form').onsubmit=(e)=>{
+      e.preventDefault();
+      const ident=modal.querySelector('#f-ident').value.trim(), pinValue=modal.querySelector('#f-pin').value.trim(), p=modal.querySelector('#f-pass').value, p2=modal.querySelector('#f-pass2').value;
+      if(!/^\d{6}$/.test(pinValue)) return showToast('Security PIN must contain exactly 6 digits.','error');
+      const group=role==='user'?'users':role==='officer'?'officers':'admins';
+      const account=state.db[group].find(a=>a.username===ident||a.email===ident||a.mobile===ident||a.officerId===ident);
+      if(!account||account.pin!==pinValue) return showToast('Incorrect account details or Security PIN.','error');
+      if(p!==p2) return showToast('Passwords do not match.','error');
+      account.password=p; saveDB(state.db); closeModal(); showToast('Account recovered successfully.','success');
+    };
+  }
+  function renderShell(app){
+    const role=state.session.role;
+    const nav=navForRole(role);
+    const acct=currentAccount();
+    const navMarkup = nav.map(([id,label,ic])=>`<button class="nav-item ${state.page===id?'active':''}" data-page="${id}" title="${esc(label)}" aria-label="${esc(label)}">${icon(ic)}<span class="nav-text">${esc(label)}</span><span class="nav-label">${esc(label)}</span></button>`).join('');
+    const roleClass = role==='user' ? 'user-shell' : role==='officer' ? 'officer-shell' : 'admin-shell';
+    app.innerHTML=`<div class="shell ${roleClass}">
+      <div class="utility-nav" id="utility-nav">
+        <button class="utility-toggle" id="utility-toggle" aria-expanded="false" aria-label="Open navigation" title="Utilities">
+          <span class="utility-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        </button>
+        ${role==='user'?`<button class="search-fab utility-search" id="utility-search" title="Search Cyber Awareness" aria-label="Search Cyber Awareness">${icon('search')}</button>`:''}
+        <div class="utility-nav-panel" aria-hidden="true">
+          <div class="nav-pill">${navMarkup}<button class="utility-switch" id="nav-switch-account" title="Switch Account" aria-label="Switch Account">${icon('switch')}<span class="nav-switch-text">Switch</span></button></div>
+        </div>
+      </div>
+      <main class="view m3-page-enter" id="main-view">${renderPage(role,acct)}</main>
+    </div>`;
+    const utility=document.getElementById('utility-nav');
+    const toggle=document.getElementById('utility-toggle');
+    const panel=utility?.querySelector('.utility-nav-panel');
+    toggle?.addEventListener('click',()=>{
+      const expanded=utility.classList.toggle('expanded');
+      toggle.setAttribute('aria-expanded',String(expanded));
+      toggle.setAttribute('aria-label',expanded?'Close navigation':'Open navigation');
+      panel?.setAttribute('aria-hidden',String(!expanded));
+    });
+    document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
+    document.getElementById('nav-switch-account')?.addEventListener('click',switchAccountModal);
+    document.getElementById('utility-search')?.addEventListener('click',openAwarenessSearch);
+    document.querySelector('.portal-avatar')?.addEventListener('click',()=>go('settings'));
+    wirePage(role);
+  }
+
+  function header(title, subtitle='', action=''){
+    const root=rootPageForRole(state.session?.role);
+    const canBack=state.page!==root;
+    return `<div class="topbar"><div class="topbar-left">${canBack?`<button class="back-btn" id="page-back" aria-label="Back" title="Back">${icon('back')}</button>`:''}<div><div class="eyebrow">${esc(subtitle)}</div><h2 style="margin-top:6px">${esc(title)}</h2></div></div>${action}</div>`;
+  }
+
+  function renderPage(role,acct){
+    if(role==='user'){
+      switch(state.page){
+        case 'report': return renderReport();
+        case 'track': return renderTrack();
+        case 'awareness': return renderAwareness();
+        case 'settings': return renderSettings('user',acct);
+        default: return renderUserHome(acct);
+      }
+    }
+    if(role==='officer'){
+      switch(state.page){
+        case 'users': return renderOfficerUsers();
+        case 'mine': return renderOfficerComplaints(true);
+        case 'update': return renderOfficerUpdate();
+        case 'all': return renderOfficerComplaints(false);
+        case 'awareness': return renderOfficerDashboard(acct);
+        case 'settings': return renderSettings('officer',acct);
+        default: return renderOfficerDashboard(acct);
+      }
+    }
+    switch(state.page){
+      case 'complaints': return renderAdminComplaints();
+      case 'allocation': return renderAdminAllocation();
+      case 'users': return renderAdminUsers();
+      case 'officers': return renderAdminOfficers();
+      case 'settings': return renderSettings('admin',acct);
+      default: return renderAdminDashboard(acct);
+    }
+  }
+  function portalHeader(role,acct){
+    const first=esc((acct?.name||role).trim().charAt(0).toUpperCase());
+    return `<div class="portal-header"><h2>${esc(role)}'s Portal</h2><button class="portal-avatar" type="button" title="Account" aria-label="Account">${first}</button></div>`;
+  }
+  function renderUserHome(acct){
+    const mine=state.db.complaints.filter(c=>c.userId===acct.id);
+    const active=mine.filter(c=>['Pending','In Progress'].includes(c.status)).length;
+    return `${portalHeader('User',acct)}<div class="grid-2 portal-kpis"><button class="kpi kpi-link" data-go="track"><div class="kpi-icon kpi-blue">${icon('report')}</div><div class="label">Complaints</div><div class="value">${mine.length}</div></button><button class="kpi kpi-link" data-go="track"><div class="kpi-icon kpi-yellow">${icon('clock')}</div><div class="label">Pending / In Progress</div><div class="value">${active}</div></button></div>
+      <section class="hero"><div class="hero-main"><div class="accent-line"></div><div class="eyebrow">WELCOME BACK</div><h1 style="margin-top:10px">Stay informed.<br>Stay safer online.</h1><p class="lead" style="margin-top:14px">Report a cybercrime, follow your complaint progress, or build better cyber-safety habits.</p><div class="btn-row" style="margin-top:22px"><button class="btn btn-primary" data-go="report">Report Cybercrime</button><button class="btn btn-secondary" data-go="awareness">Explore Awareness</button></div></div>
+      <div class="hero-side"><div><div class="eyebrow">YOUR ACTIVITY</div><div class="mini-stat"><div><div class="small muted">Complaints</div><strong>${mine.length}</strong></div><span class="badge blue">Total</span></div><div class="mini-stat"><div><div class="small muted">Active cases</div><strong>${active}</strong></div><span class="badge orange">Open</span></div><div class="mini-stat"><div><div class="small muted">Latest status</div><strong style="font-size:20px">${esc(mine[0]?.status||'—')}</strong></div></div></div></div></section>
+      <section class="card-grid"><div class="card action-card" data-go="report"><div><div class="icon-wrap">${icon('report')}</div><h3>Report Cybercrime</h3><p>Register an incident with the date, time, circumstances, evidence, and other details.</p></div><button class="card-link">Register a complaint →</button></div><div class="card action-card" data-go="track"><div><div class="icon-wrap">${icon('track')}</div><h3>Track Progress</h3><p>View your complaint status, investigation updates, findings, and progress timeline.</p></div><button class="card-link">Open tracking →</button></div><div class="card action-card" data-go="awareness"><div><div class="icon-wrap">${icon('awareness')}</div><h3>Awareness</h3><p>Learn how common cyber threats work and what to do when something suspicious happens.</p></div><button class="card-link">Learn cyber safety →</button></div></section>
+      <section class="section"><div class="section-head"><div><div class="eyebrow">LATEST</div><h3 style="margin-top:4px">Recent complaints</h3></div><button class="btn btn-ghost" data-go="track">View all</button></div>${mine.length?`<div class="list">${mine.slice(0,4).map(c=>`<button class="list-item" data-track="${c.id}"><div style="text-align:left"><strong>${esc(c.complaintId)}</strong><div class="small muted">${esc(c.type)} · ${fmtDate(c.createdAt)}</div></div><span class="badge ${badgeClass(c.status)}">${esc(c.status)}</span></button>`).join('')}</div>`:`<div class="card empty">You have not registered a complaint yet.</div>`}</section>`;
+  }
+
+  function badgeClass(status){ if(status==='Solved') return 'green'; if(status==='In Progress') return 'orange'; if(status==='Pending') return 'blue'; if(status==='Dismissed') return 'red'; return ''; }
+
+  function renderReport(){
+    const acct=currentAccount();
+    const latest=(state.db.complaints.filter(c=>c.userId===acct.id).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))[0]);
+    return `${header('Report Cybercrime','REGISTER A NEW INCIDENT')}
+      <div class="card"><form id="complaint-form" class="form-grid">
+        <div class="field"><label>Cybercrime Type</label><select id="c-type" required>${['UPI / Payment Fraud','Phishing','Account Hacking','Identity Theft','Cyberbullying','Social Media Fraud','Fake Website / Application','Online Scam','Malware','Other'].map(x=>`<option>${x}</option>`).join('')}</select><input id="c-type-other" class="conditional-input" placeholder="Specify the cybercrime type" style="display:none;margin-top:8px"></div>
+        <div class="field"><label>Platform Involved</label><select id="c-platform" required><option value="">Select platform…</option><option>WhatsApp</option><option>Instagram</option><option>UPI App</option><option>Email</option><option>Other</option></select><input id="c-platform-other" class="conditional-input" placeholder="Specify the platform" style="display:none;margin-top:8px"></div>
+        <div class="field"><label>Incident Date</label><input id="c-date" type="date" required></div>
+        <div class="field"><label>Incident Time</label><input id="c-time" type="time" required></div>
+        <div class="field"><label>Financial Loss (if applicable)</label><input id="c-loss" type="number" min="0" step="0.01" placeholder="0"></div>
+        <div class="field"><label>Suspect Details (if known)</label><button type="button" class="btn btn-secondary full-width-action" id="suspect-trigger">Do you know the suspect?</button><div class="helper" id="suspect-summary" style="margin-top:8px">No suspect information provided.</div></div>
+        <div class="field full"><label>Exact Circumstances / Incident Details</label><textarea id="c-details" placeholder="Explain exactly what happened, including relevant messages, calls, transactions, links, or other circumstances." required></textarea></div>
+        <div class="field full"><label>Evidence</label><input id="c-files" type="file" multiple accept="image/*,video/*,.pdf,.txt,.doc,.docx"><div class="helper">Upload screenshots, images, documents, or screen recordings/videos as evidence.</div></div>
+        <div class="field full"><div class="helper">Review the complaint before final submission. Only information relevant to the incident should be included.</div></div>
+        <div class="field full"><button class="btn btn-primary">Review Complaint</button></div>
+      </form></div>
+      <div class="card" style="margin-top:16px"><div class="section-head"><div><div class="eyebrow">DOWNLOAD</div><h3 style="margin-top:4px">Your latest report</h3></div>${latest?`<button class="btn btn-secondary" id="download-latest-report">Download Report</button>`:''}</div><p class="muted" style="margin-top:8px">${latest?`Download a structured copy of ${esc(latest.complaintId)} for your records.`:'After you register a complaint, a structured downloadable report will appear here.'}</p></div>`;
+  }
+
+  function formatSuspect(suspect){
+    if(!suspect) return 'Not specified';
+    if(typeof suspect==='string') return suspect;
+    if(suspect.known===false) return 'User does not know the suspect.';
+    if(suspect.known===true) return `Known suspect: ${suspect.name||'Name not provided'}${suspect.phone?` · ${suspect.phone}`:''}${suspect.address?` · ${suspect.address}`:''}`;
+    return 'Not specified';
+  }
+
+  function renderEvidencePreviews(evidence){
+    const items=Array.isArray(evidence)?evidence:[];
+    if(!items.length) return '<div class="helper">No evidence uploaded.</div>';
+    return `<div class="evidence-gallery">${items.map((e,i)=>{
+      const type=e.type||'';
+      if(type.startsWith('image/') && e.data){
+        return `<div class="evidence-preview"><img src="${e.data}" alt="${esc(e.name||`Evidence ${i+1}`)}"><div class="small muted" style="margin-top:7px">${esc(e.name||`Evidence ${i+1}`)}</div></div>`;
+      }
+      return `<div class="evidence-file"><div class="icon-wrap">${icon('paperclip')}</div><div><strong>${esc(e.name||`Evidence ${i+1}`)}</strong><div class="small muted">${esc(type||'file')}</div></div></div>`;
+    }).join('')}</div>`;
+  }
+
+  function downloadComplaintReport(c){
+    const user=state.db.users.find(u=>u.id===c.userId) || currentAccount();
+    const officer=state.db.officers.find(o=>o.id===c.assignedOfficerId);
+    const suspect=formatSuspect(c.suspect);
+    const evidence=(c.evidence||[]).map(e=>`<li>${esc(e.name||'Evidence')} — ${esc(e.type||'file')}</li>`).join('') || '<li>No evidence uploaded.</li>';
+    const history=(c.history||[]).map(h=>`<tr><td>${esc(h.status)}</td><td>${fmtDate(h.at)}</td><td>${esc(h.finding||'—')}</td><td>${esc(h.remarks||'—')}</td></tr>`).join('');
+    const html=`<!doctype html><html><head><meta charset="utf-8"><title>${esc(c.complaintId)} - Cybercrime Report</title><style>body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#1d1d1f;background:#f5f5f7;margin:0;padding:40px}main{max-width:900px;margin:auto;background:#fff;padding:36px;border-radius:24px;box-shadow:0 10px 35px rgba(0,0,0,.08)}h1{margin:0 0 6px}h2{margin-top:30px;border-bottom:1px solid #ddd;padding-bottom:8px}p{line-height:1.55}table{width:100%;border-collapse:collapse;margin-top:10px}th,td{border:1px solid #ddd;padding:9px;text-align:left;font-size:13px}th{background:#f2f2f7}.meta{color:#666}.label{font-weight:700}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.box{padding:14px;background:#f7f7fa;border-radius:14px}@media(max-width:700px){body{padding:15px}.grid{grid-template-columns:1fr}}</style>
+
+</head><body><main><h1>Cybercrime Report</h1><p class="meta"><strong>Complaint ID:</strong> ${esc(c.complaintId)}<br>Generated: ${esc(new Date().toLocaleString())}</p><h2>Complaint Details</h2><div class="grid"><div class="box"><span class="label">User</span><br>${esc(user?.name||'—')}</div><div class="box"><span class="label">Status</span><br>${esc(c.status||'—')}</div><div class="box"><span class="label">Cybercrime Type</span><br>${esc(c.type||'—')}</div><div class="box"><span class="label">Platform</span><br>${esc(c.platform||'—')}</div><div class="box"><span class="label">Incident Date</span><br>${esc(c.incidentDate||'—')}</div><div class="box"><span class="label">Incident Time</span><br>${esc(c.incidentTime||'—')}</div><div class="box"><span class="label">Financial Loss</span><br>${c.loss?`₹${esc(c.loss)}`:'Not specified'}</div><div class="box"><span class="label">Officer Handling</span><br>${esc(officer?.name||'Not Allocated')}</div></div><h2>Incident Circumstances</h2><p>${esc(c.details||'—')}</p><h2>Suspect Details</h2><p>${esc(suspect)}</p><h2>Evidence</h2><ul>${evidence}</ul><h2>Progress History</h2><table><thead><tr><th>Status</th><th>Date & Time</th><th>Finding</th><th>Remarks</th></tr></thead><tbody>${history}</tbody></table></main>
+
+
+</body></html>`;
+    const blob=new Blob([html],{type:'text/html'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`Cybercrime_Report_${c.complaintId}.html`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('Report downloaded successfully.','success');
+  }
+
+  function openComplaintReview(formValues, evidence){
+    const html=`<div class="grid-2"><div class="card"><div class="eyebrow">INCIDENT</div><h3 style="margin-top:6px">${esc(formValues.type)}</h3><p class="muted" style="margin-top:8px">${esc(formValues.details)}</p></div><div class="card"><div class="eyebrow">WHEN & WHERE</div><div style="margin-top:8px">${esc(formValues.date)} · ${esc(formValues.time)}</div><div class="muted small" style="margin-top:4px">${esc(formValues.platform)}</div></div></div><div class="card" style="margin-top:14px"><div class="list-item"><span>Financial Loss</span><strong>${formValues.loss?`₹${esc(formValues.loss)}`:'Not specified'}</strong></div><div class="list-item" style="margin-top:8px"><span>Suspect Details</span><span class="muted">${esc(formatSuspect(formValues.suspect))}</span></div><div style="margin-top:14px"><div class="small muted">Evidence</div>${renderEvidencePreviews(evidence)}</div></div><div class="btn-row" style="margin-top:16px"><button class="btn btn-secondary" id="review-back">Edit</button><button class="btn btn-primary" id="review-submit">Submit Complaint</button></div>`;
+    const modal=openModal('Review complaint',html,{eyebrow:'BEFORE SUBMISSION'});
+    modal.querySelector('#review-back').onclick=closeModal;
+    modal.querySelector('#review-submit').onclick=()=>{
+      const acct=currentAccount(); const id=complaintId(); const now=new Date().toISOString();
+      const c={id:uid('cmp'),complaintId:id,userId:acct.id,type:formValues.type,platform:formValues.platform,incidentDate:formValues.date,incidentTime:formValues.time,loss:formValues.loss,suspect:formValues.suspect,details:formValues.details,evidence:evidence.map(e=>({name:e.name,type:e.type,size:e.size,kind:e.kind||'upload',data:e.data||null})),assignedOfficerId:null,status:'Pending',createdAt:now,updatedAt:now,history:[{status:'Pending',finding:'',remarks:'Complaint successfully registered and waiting for review.',at:now}]};
+      state.db.complaints.unshift(c); saveDB(state.db); closeModal(); showToast('Complaint registered successfully.','success');
+      const confirmation=openModal('Complaint Registered',`<div class="card"><div class="eyebrow">REFERENCE ID</div><h2 style="margin-top:6px">${esc(id)}</h2><p class="muted" style="margin-top:8px">Keep this complaint ID for tracking. You can also download a structured report of this complaint.</p><div class="btn-row" style="margin-top:16px"><button class="btn btn-secondary" id="confirm-close">Close</button><button class="btn btn-primary" id="confirm-download">Download Report</button></div></div>`);
+      confirmation.querySelector('#confirm-close').onclick=()=>{closeModal(); go('track');};
+      confirmation.querySelector('#confirm-download').onclick=()=>downloadComplaintReport(c);
+    };
+  }
+
+  async function collectFileData(files){
+    const out=[]; for(const f of files){
+      const reader=new FileReader(); const data=await new Promise(resolve=>{reader.onload=()=>resolve(reader.result); reader.readAsDataURL(f);});
+      out.push({name:f.name,type:f.type,size:f.size,data});
+    } return out;
+  }
+
+  function bindReport(){
+    const form=document.getElementById('complaint-form'); if(!form) return;
+    const typeSelect=document.getElementById('c-type'), typeOther=document.getElementById('c-type-other');
+    const platformSelect=document.getElementById('c-platform'), platformOther=document.getElementById('c-platform-other');
+    const suspectButton=document.getElementById('suspect-trigger'), suspectSummary=document.getElementById('suspect-summary');
+    let suspectInfo={known:null,name:'',phone:'',address:''};
+    const syncConditional=(select,input)=>{ const isOther=select.value==='Other'; input.style.display=isOther?'block':'none'; input.required=isOther; if(!isOther) input.value=''; };
+    typeSelect.onchange=()=>syncConditional(typeSelect,typeOther); platformSelect.onchange=()=>syncConditional(platformSelect,platformOther);
+    const renderSuspect=()=>{ suspectSummary.textContent=suspectInfo.known===true?formatSuspect(suspectInfo):suspectInfo.known===false?'No, I do not know the suspect.':'No suspect information provided.'; };
+    suspectButton.onclick=()=>{
+      const modal=openModal('Suspect Details',`<div class="field full"><label>Do you know the suspect?</label><div class="segmented" id="suspect-choice"><button type="button" data-value="yes" class="${suspectInfo.known===true?'active':''}">Yes</button><button type="button" data-value="no" class="${suspectInfo.known===false?'active':''}">No</button></div></div><div id="suspect-fields" style="display:${suspectInfo.known===true?'block':'none'};margin-top:14px"><div class="form-grid"><div class="field"><label>Full Name</label><input id="s-name" value="${esc(suspectInfo.name)}"></div><div class="field"><label>Phone Number</label><input id="s-phone" value="${esc(suspectInfo.phone)}" inputmode="tel"></div><div class="field full"><label>Address <span class="muted">(optional)</span></label><input id="s-address" value="${esc(suspectInfo.address)}"></div></div></div><div class="btn-row" style="margin-top:18px"><button class="btn btn-primary" id="save-suspect">Save</button></div>`);
+      const choice=modal.querySelector('#suspect-choice'), fields=modal.querySelector('#suspect-fields');
+      choice.querySelectorAll('button').forEach(b=>b.onclick=()=>{ choice.querySelectorAll('button').forEach(x=>x.classList.remove('active')); b.classList.add('active'); fields.style.display=b.dataset.value==='yes'?'block':'none'; suspectInfo.known=b.dataset.value==='yes'; });
+      modal.querySelector('#save-suspect').onclick=()=>{
+        if(suspectInfo.known===true){ suspectInfo.name=modal.querySelector('#s-name').value.trim(); suspectInfo.phone=modal.querySelector('#s-phone').value.trim(); suspectInfo.address=modal.querySelector('#s-address').value.trim(); if(!suspectInfo.name && !suspectInfo.phone) return showToast('Enter at least the suspect full name or phone number.','warning'); }
+        else if(suspectInfo.known===false){ suspectInfo.name=''; suspectInfo.phone=''; suspectInfo.address=''; }
+        else return showToast('Choose Yes or No first.','warning');
+        renderSuspect(); closeModal(); showToast('Suspect details saved.','success');
+      };
+    };
+    form.onsubmit=async e=>{
+      e.preventDefault();
+      if(typeSelect.value==='Other'&&!typeOther.value.trim()) return showToast('Please specify the cybercrime type.','warning');
+      if(!platformSelect.value) return showToast('Please select the platform involved.','warning');
+      if(platformSelect.value==='Other'&&!platformOther.value.trim()) return showToast('Please specify the platform involved.','warning');
+      if(suspectInfo.known===null) return showToast('Please indicate whether you know the suspect.','warning');
+      const files=await collectFileData([...document.getElementById('c-files').files]);
+      const type=typeSelect.value==='Other'?typeOther.value.trim():typeSelect.value;
+      const platform=platformSelect.value==='Other'?platformOther.value.trim():platformSelect.value;
+      openComplaintReview({type,platform,date:document.getElementById('c-date').value,time:document.getElementById('c-time').value,loss:document.getElementById('c-loss').value,suspect:{...suspectInfo},details:document.getElementById('c-details').value.trim()},files);
+    };
+    document.getElementById('download-latest-report')?.addEventListener('click',()=>{const acct=currentAccount(); const latest=state.db.complaints.filter(c=>c.userId===acct.id).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))[0]; if(latest) downloadComplaintReport(latest);});
+    const loss=document.getElementById('c-loss'); if(loss) loss.addEventListener('wheel',()=>loss.blur());
+  }
+
+  function userComplaints(){ const a=currentAccount(); return state.db.complaints.filter(c=>c.userId===a.id); }
+  function renderTrack(){
+    const cs=userComplaints();
+    return `${header('Track Progress','YOUR COMPLAINTS',`<button class="btn btn-primary" data-go="report">New Complaint</button>`)}${cs.length?`<div class="grid-2">${cs.map(c=>`<div class="card"><div class="section-head"><div><div class="eyebrow">${esc(c.complaintId)}</div><h3 style="margin-top:6px">${esc(c.type)}</h3></div><span class="badge ${badgeClass(c.status)}">${esc(c.status)}</span></div><div class="small muted">Registered ${fmtDate(c.createdAt)}</div><div class="timeline">${c.history.map((h,i)=>`<div class="timeline-item ${i===c.history.length-1?'current':'done'}"><span class="timeline-dot"></span><div class="timeline-title">${esc(h.status)}</div>${h.finding?`<div class="small" style="margin-top:4px"><strong>Finding:</strong> ${esc(h.finding)}</div>`:''}<div class="timeline-meta">${fmtDate(h.at)}${h.remarks?` · ${esc(h.remarks)}`:''}</div></div>`).join('')}</div>${c.assignedOfficerId?`<div class="divider"></div><div class="small muted">Assigned officer</div><div style="margin-top:4px"><strong>${esc(state.db.officers.find(o=>o.id===c.assignedOfficerId)?.name||'Officer')}</strong></div>`:''}<div class="btn-row" style="margin-top:14px"><button class="btn btn-secondary" data-download-report="${c.id}">Download Report</button></div></div>`).join('')}</div>`:`<div class="card empty"><div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px">No complaints yet</div>Register a complaint to see its investigation progress here.</div>`}`;
+  }
+
+  function renderAwareness(){
+    const articles=state.db.awareness||[];
+    return `${header('Awareness','CYBER SAFETY KNOWLEDGE',`<div class="badge blue">${articles.length} topics</div>`)}<div class="card" style="margin-bottom:16px"><p class="lead" style="font-size:16px">Explore practical guidance about common cyber threats, warning signs, safe habits, and what to do after an incident.</p></div><div id="awareness-list">${articles.map(a=>`<article id="article-${esc(a.id)}" class="card article-card awareness-article"><div class="eyebrow">AWARENESS TOPIC</div><h3 style="margin-top:6px">${esc(a.title)}</h3><p>${esc(a.body)}</p><ul>${a.tips.map(t=>`<li>${esc(t)}</li>`).join('')}</ul></article>`).join('')}</div><section class="section"><div class="card"><div class="section-head"><div><div class="eyebrow">CYBER SAFETY QUIZ</div><h3 style="margin-top:4px">Test what you learned</h3></div><button class="btn btn-primary" id="start-quiz">Start Quiz</button></div><p class="muted">10 questions · instant score · explanations after submission</p></div></section>`;
+  }
+
+  function openAwarenessSearch(){
+    if(state.session?.role!=='user') return;
+    const modal=openModal('Search Cyber Awareness',`<div class="search-layout"><div class="search-box"><div class="eyebrow">SEARCH</div><h3 style="margin:6px 0 14px">Find an awareness topic</h3><div class="field"><label for="aw-search">Search title, keyword, category, or article text</label><input id="aw-search" placeholder="e.g. phishing, UPI, password…" autofocus></div><div class="helper" style="margin-top:10px">This search only uses content stored in the Awareness Portal.</div></div><div class="search-results"><div class="eyebrow">SEARCH RESULTS</div><div id="aw-results" style="margin-top:10px"><div class="empty" style="padding:30px 10px">Start typing to search.</div></div></div></div>`);
+    const input=modal.querySelector('#aw-search'); const results=modal.querySelector('#aw-results');
+    const perform=()=>{
+      const q=input.value.trim().toLowerCase(); if(!q){ results.innerHTML='<div class="empty" style="padding:30px 10px">Start typing to search.</div>'; return; }
+      const matches=(state.db.awareness||[]).filter(a=>`${a.title} ${a.body} ${a.keywords.join(' ')} ${a.tips.join(' ')}`.toLowerCase().includes(q));
+      results.innerHTML=matches.length?matches.map(a=>`<button class="search-result" data-result="${esc(a.id)}"><div class="title">${esc(a.title)}</div><div class="desc">${esc(a.desc)}</div></button>`).join(''):'<div class="empty" style="padding:30px 10px"><strong style="color:var(--text);display:block;margin-bottom:5px">No Content Found</strong>No awareness article matches your search.</div>';
+      results.querySelectorAll('[data-result]').forEach(b=>b.onclick=()=>{closeModal(); go('awareness'); setTimeout(()=>document.getElementById(`article-${b.dataset.result}`)?.scrollIntoView({behavior:'smooth',block:'start'}),50);});
+    };
+    input.addEventListener('input',perform);
+  }
+
+  function renderQuizModal(){
+    let i=0, answers=Array(quizQuestions.length).fill(null), submitted=false;
+    const modal=openModal('Cyber Safety Quiz',`<div id="quiz-body"></div>`);
+    const body=modal.querySelector('#quiz-body');
+    function draw(){
+      if(submitted) return drawResult();
+      const q=quizQuestions[i]; body.innerHTML=`<div class="eyebrow">QUESTION ${i+1} OF ${quizQuestions.length}</div><h3 style="margin-top:8px">${esc(q.q)}</h3><div style="margin-top:16px">${q.options.map((o,idx)=>`<button class="quiz-option ${answers[i]===idx?'selected':''}" data-opt="${idx}">${String.fromCharCode(65+idx)}. ${esc(o)}</button>`).join('')}</div><div class="btn-row" style="margin-top:18px;justify-content:space-between"><button class="btn btn-secondary" id="quiz-prev" ${i===0?'disabled':''}>Previous</button><button class="btn btn-primary" id="quiz-next">${i===quizQuestions.length-1?'Submit Quiz':'Next'}</button></div>`;
+      body.querySelectorAll('[data-opt]').forEach(b=>b.onclick=()=>{answers[i]=Number(b.dataset.opt); draw();});
+      body.querySelector('#quiz-prev').onclick=()=>{i--; draw();};
+      body.querySelector('#quiz-next').onclick=()=>{ if(answers[i]===null) return showToast('Please select an answer.','warning'); if(i<quizQuestions.length-1){i++;draw();}else{submitted=true;draw();} };
+    }
+    function drawResult(){
+      const score=answers.reduce((n,a,idx)=>n+(a===quizQuestions[idx].answer?1:0),0);
+      const message=score>=9?'Excellent awareness. You demonstrate strong understanding of common cyber-safety practices.':score>=7?'Good awareness. Review the topics where you made mistakes.':score>=5?'Moderate awareness. We recommend revisiting the Awareness Portal.':'Needs improvement. Please review the cyber-safety guidance before taking the quiz again.';
+      const acct=currentAccount(); state.db.quizResults.push({id:uid('quiz'),userId:acct.id,score,total:10,at:new Date().toISOString()}); saveDB(state.db);
+      body.innerHTML=`<div class="card" style="text-align:center"><div class="eyebrow">YOUR RESULT</div><div style="font-size:64px;font-weight:800;letter-spacing:-.05em;margin-top:8px">${score}<span style="font-size:26px;color:var(--muted)">/10</span></div><p class="muted" style="margin-top:6px">${esc(message)}</p></div><div class="section">${quizQuestions.map((q,idx)=>`<div class="card" style="margin-top:10px"><div class="eyebrow">QUESTION ${idx+1}</div><div style="font-weight:700;margin-top:5px">${esc(q.q)}</div><div class="small" style="margin-top:8px"><strong>Correct:</strong> ${String.fromCharCode(65+q.answer)}. ${esc(q.options[q.answer])}</div><div class="helper" style="margin-top:6px">${esc(q.explanation)}</div></div>`).join('')}</div><div class="btn-row" style="margin-top:16px"><button class="btn btn-primary" id="quiz-close">Done</button></div>`;
+      body.querySelector('#quiz-close').onclick=closeModal;
+    }
+    draw();
+  }
+
+  function renderSettings(role,acct){
+    const roleName=role==='admin'?'Administrator':role[0].toUpperCase()+role.slice(1);
+    const ownComplaints=role==='user'?state.db.complaints.filter(c=>c.userId===acct.id).length:null;
+    return `${header('Settings',roleName.toUpperCase(),`<span class="badge">${esc(roleName)}</span>`)}
+      <div class="grid-2">
+        <div class="card">
+          <div class="profile-row" style="align-items:flex-start"><div class="avatar">${esc(initials(acct.name))}</div><div style="flex:1"><div class="eyebrow">PROFILE</div><h3 style="margin-top:4px">${esc(acct.name)}</h3><div class="small muted">${esc(acct.username||'')}</div></div><button class="btn btn-secondary" id="edit-profile" aria-label="Edit profile">${icon('edit')}</button></div>
+          <div class="divider"></div>
+          <div class="list">
+            <div class="list-item"><span>Full Name</span><strong>${esc(acct.name||'—')}</strong></div>
+            <div class="list-item"><span>Username</span><strong>${esc(acct.username||'—')}</strong></div>
+            <div class="list-item"><span>Email ID</span><strong>${esc(acct.email||'—')}</strong></div>
+            <div class="list-item"><span>Mobile Number</span><strong>${esc(acct.mobile||'—')}</strong></div>
+            <div class="list-item"><span>Address</span><strong style="max-width:60%;text-align:right">${esc(acct.address||'Not provided')}</strong></div>
+            ${role==='officer'?`<div class="list-item"><span>Post</span><strong>${esc(acct.post||'Cybercrime Investigation Officer')}</strong></div>`:''}
+            <div class="list-item"><span>Role</span><strong>${esc(roleName)}</strong></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="eyebrow">ACCOUNT</div>
+          <div class="list" style="margin-top:12px">
+            <button class="list-item" id="change-password"><span>Reset Password</span><span>›</span></button>
+            <button class="list-item" id="reset-pin"><span>Reset Security PIN</span><span>›</span></button>
+            <button class="list-item" id="switch-account"><span>Switch Account</span><span>›</span></button>
+          </div>
+          <div class="divider"></div>
+          <div class="section-head"><div><div class="eyebrow">APPEARANCE</div><h3 style="margin-top:4px">Dark Mode</h3></div><button class="btn btn-secondary" id="theme-toggle">${(state.db.settings.theme||'light')==='dark'?icon('sun')+' Light':icon('moon')+' Dark'}</button></div>
+          <p class="muted">The appearance preference is stored locally on this device.</p>
+        </div>
+        ${role==='user'?`<div class="card" style="grid-column:1/-1"><div class="eyebrow">COMPLAINTS</div><h3 style="margin-top:4px">Delete All Complaints</h3><p class="muted" style="margin-top:8px">Permanently delete all complaints registered by your account from this browser.</p><button class="btn btn-danger" style="margin-top:14px" id="delete-complaints">${icon('trash')} Delete All Complaints</button></div>`:''}
+        ${role==='officer'?`<div class="card" style="grid-column:1/-1"><div class="eyebrow">USER MANAGEMENT</div><h3 style="margin-top:4px">Delete All Users</h3><p class="muted" style="margin-top:8px">This demo permission removes every locally stored user account. Complaint records remain for system history.</p><button class="btn btn-danger" style="margin-top:14px" id="delete-users">${icon('trash')} Delete All Users</button></div>`:''}
+        ${role==='admin'?`<div class="card" style="grid-column:1/-1"><div class="eyebrow">ADMINISTRATION</div><h3 style="margin-top:4px">System Controls</h3><div class="btn-row" style="margin-top:14px"><button class="btn btn-danger" id="delete-complaints">${icon('trash')} Delete All Complaints</button><button class="btn btn-danger" id="delete-users">${icon('trash')} Delete All Users</button><button class="btn btn-danger" id="delete-officers">${icon('trash')} Delete All Officers</button><button class="btn btn-secondary" id="login-access">Manage Login Access</button></div></div>`:''}
+        <div class="card" style="grid-column:1/-1"><div class="section-head"><div><div class="eyebrow">ABOUT</div><h3 style="margin-top:4px">Developers & Project</h3></div><button class="btn btn-secondary" id="open-about">Open</button></div><p class="muted">Guided by MRS. Poonam Phafat and developed by the team.</p></div>
+        <div class="card" style="grid-column:1/-1"><button class="btn btn-ghost" id="logout">${icon('logout')} Log Out</button></div>
+      </div>`;
+  }
+  function accountGroup(role){ return role==='user'?'users':role==='officer'?'officers':'admins'; }
+  function editProfileModal(){
+    const acct=currentAccount();
+    const role=state.session.role;
+    const modal=openModal('Edit Profile',`<form id="profile-form" class="form-grid">
+      <div class="field"><label>Full Name</label><input id="p-name" value="${esc(acct.name)}" required></div>
+      <div class="field"><label>Username</label><input value="${esc(acct.username)}" disabled></div>
+      <div class="field"><label>Email ID</label><input id="p-email" value="${esc(acct.email||'')}" required type="email"></div>
+      <div class="field"><label>Mobile Number</label><input id="p-mobile" value="${esc(acct.mobile||'')}" inputmode="tel"></div>
+      <div class="field"><label>Address</label><input id="p-address" value="${esc(acct.address||'')}"></div>
+      ${role==='officer'?`<div class="field"><label>Post</label><input id="p-post" value="${esc(acct.post||'Cybercrime Investigation Officer')}"></div>`:''}
+      <div class="field full"><button class="btn btn-primary">Save Profile</button></div>
+    </form>`);
+    modal.querySelector('#profile-form').onsubmit=e=>{ e.preventDefault(); acct.name=modal.querySelector('#p-name').value.trim(); acct.email=modal.querySelector('#p-email').value.trim(); acct.mobile=modal.querySelector('#p-mobile').value.trim(); acct.address=modal.querySelector('#p-address').value.trim(); if(role==='officer')acct.post=modal.querySelector('#p-post').value.trim()||'Cybercrime Investigation Officer'; saveDB(state.db); closeModal(); showToast('Profile updated successfully.','success'); render(); };
+  }
+  function changePasswordModal(){
+    const modal=openModal('Change Password',`<form id="cp-form" class="form-grid"><div class="field full"><label>Current Password</label><input id="cp-old" type="password" required></div><div class="field"><label>New Password</label><input id="cp-new" type="password" required></div><div class="field"><label>Confirm New Password</label><input id="cp-new2" type="password" required></div><div class="field full"><button class="btn btn-primary">Save Password</button></div></form>`);
+    modal.querySelector('#cp-form').onsubmit=e=>{e.preventDefault(); const a=currentAccount(),old=modal.querySelector('#cp-old').value,n=modal.querySelector('#cp-new').value,n2=modal.querySelector('#cp-new2').value; if(old!==a.password) return showToast('Current password is incorrect.','error'); if(n!==n2)return showToast('Passwords do not match.','error'); a.password=n; saveDB(state.db); closeModal(); showToast('Password changed successfully.');};
+  }
+  function resetPinModal(){
+    const modal=openModal('Reset Security PIN',`<form id="rp-form" class="form-grid"><div class="field full"><label>Current Password</label><input id="rp-pass" type="password" required></div><div class="field"><label>New 6-digit Security PIN</label><input id="rp-pin" maxlength="6" minlength="6" inputmode="numeric" pattern="[0-9]{6}" required></div><div class="field"><label>Confirm Security PIN</label><input id="rp-pin2" maxlength="6" minlength="6" inputmode="numeric" pattern="[0-9]{6}" required></div><div class="field full"><button class="btn btn-primary">Update Security PIN</button></div></form>`);
+    [modal.querySelector('#rp-pin'),modal.querySelector('#rp-pin2')].forEach(pin=>pin.addEventListener('input',()=>{pin.value=pin.value.replace(/\D/g,'').slice(0,6);}));
+    modal.querySelector('#rp-form').onsubmit=e=>{e.preventDefault(); const a=currentAccount(),p=modal.querySelector('#rp-pass').value,pin=modal.querySelector('#rp-pin').value,pin2=modal.querySelector('#rp-pin2').value; if(p!==a.password)return showToast('Current password is incorrect.','error'); if(!/^\d{6}$/.test(pin)||pin!==pin2)return showToast('Security PIN must match and contain 6 digits.','error'); a.pin=pin; saveDB(state.db); closeModal(); showToast('Security PIN updated successfully.','success');};
+  }
+  function switchAccountModal(){
+    const modal=openModal('Switch Account',`<form id="switch-form" class="form-grid"><div class="field full"><label>Switch to profile</label><select id="s-role"><option value="user">User</option><option value="officer">Officer</option><option value="admin">Administrator</option></select></div><div class="field full"><label>Account identifier</label><input id="s-ident" placeholder="Username / email / mobile / officer ID" required></div><div class="field full"><label>Password</label><input id="s-pass" type="password" required></div><div class="field full"><button class="btn btn-primary">Authenticate & Switch</button></div></form>`);
+    modal.querySelector('#switch-form').onsubmit=e=>{e.preventDefault(); const r=modal.querySelector('#s-role').value,id=modal.querySelector('#s-ident').value.trim(),p=modal.querySelector('#s-pass').value,group=accountGroup(r),a=state.db[group].find(x=>x.username===id||x.email===id||x.mobile===id||x.officerId===id); if(!a||a.password!==p||a.active===false)return showToast('Invalid account or password.','error'); state.session={role:r,id:a.id}; state.page=r==='admin'?'dashboard':'home'; state.history=[]; saveSession(state.session); closeModal(); showToast(`Switched to ${r==='admin'?'Administrator':r} profile.`,'success'); render();};
+  }
+
+  function openAbout(){
+    openModal('Developers',`<div class="grid-2"><div class="card"><h3 style="margin-top:0">Guided By</h3><p style="margin-top:8px"><strong>MRS. Poonam Phafat</strong></p><div class="divider"></div><div class="small muted">Development Team</div><div class="list" style="margin-top:8px"><div class="list-item"><span>Omkar Chopade</span></div><div class="list-item"><span>Shreetej Rokade</span></div><div class="list-item"><span>Pranjal Shinde</span></div><div class="list-item"><span>Siddharth Shinde</span></div></div></div><div class="card"><div class="small muted">Department</div><p style="margin-top:4px"><strong>Department of Information Technology</strong></p><div class="small muted" style="margin-top:14px">Institution</div><p style="margin-top:4px"><strong>Government Polytechnic Pune</strong></p></div></div>`);
+  }
+
+  function renderOfficerDashboard(acct){
+    const mine=state.db.complaints.filter(c=>c.assignedOfficerId===acct.id), active=mine.filter(c=>['Pending','In Progress'].includes(c.status)).length;
+    return `${portalHeader('Officer',acct)}<div class="grid-4"><button class="kpi kpi-link" data-go="mine"><div class="kpi-icon kpi-blue">${icon('report')}</div><div class="label">Allocated</div><div class="value">${mine.length}</div></button><button class="kpi kpi-link" data-go="mine"><div class="kpi-icon kpi-yellow">${icon('clock')}</div><div class="label">Pending / In Progress</div><div class="value">${active}</div></button><button class="kpi kpi-link" data-go="mine"><div class="kpi-icon kpi-green">${icon('check')}</div><div class="label">Solved</div><div class="value">${mine.filter(c=>c.status==='Solved').length}</div></button><button class="kpi kpi-link" data-go="mine"><div class="kpi-icon kpi-red">${icon('close')}</div><div class="label">Dismissed</div><div class="value">${mine.filter(c=>c.status==='Dismissed').length}</div></button></div><section class="section"><div class="section-head"><div><div class="eyebrow">WORK QUEUE</div><h3>My latest cases</h3></div><button class="btn btn-secondary" data-go="mine">Open My Complaints</button></div>${mine.length?`<div class="list">${mine.slice(0,6).map(c=>`<button class="list-item" data-officer-complaint="${c.id}"><div style="text-align:left"><strong>${esc(c.complaintId)}</strong><div class="small muted">${esc(c.type)} · ${fmtDate(c.createdAt)}</div></div><span class="badge ${badgeClass(c.status)}">${esc(c.status)}</span></button>`).join('')}</div>`:`<div class="card empty">No complaints are currently allocated to you.</div>`}</section>`;
+  }
+  function renderOfficerComplaints(onlyMine){
+    const acct=currentAccount(); const list=onlyMine?state.db.complaints.filter(c=>c.assignedOfficerId===acct.id):state.db.complaints;
+    return `${header(onlyMine?'Allocated Complaints':'All Complaints','OFFICER WORKSPACE')}
+      <div class="card"><div class="table-wrap"><table><thead><tr><th>User</th><th>Complaint ID</th><th>Complaint Criteria</th><th>Status</th><th>Officer Handling</th><th>Updated</th></tr></thead><tbody>${list.length?list.map(c=>`<tr><td>${esc(state.db.users.find(u=>u.id===c.userId)?.name||'Deleted User')}</td><td><strong>${esc(c.complaintId)}</strong></td><td>${esc(c.type)}</td><td><span class="badge ${badgeClass(c.status)}">${esc(c.status)}</span></td><td>${esc(state.db.officers.find(o=>o.id===c.assignedOfficerId)?.name||'Not Allocated')}</td><td>${fmtDate(c.updatedAt)}</td></tr>`).join(''):`<tr><td colspan="6" class="empty">No complaints found.</td></tr>`}</tbody></table></div></div>`;
+  }
+  function officerComplaintModal(id){
+    const c=state.db.complaints.find(x=>x.id===id); if(!c)return;
+    const acct=currentAccount();
+    const canEdit=c.assignedOfficerId===acct.id;
+    const user=state.db.users.find(u=>u.id===c.userId);
+    const body=`<div class="grid-2"><div class="card"><div class="eyebrow">COMPLAINT</div><h3>${esc(c.complaintId)}</h3><p class="small muted" style="margin-top:6px">${esc(c.type)} · ${fmtDate(c.createdAt)}</p><div class="divider"></div><div><strong>Incident</strong><p class="muted" style="margin-top:6px;line-height:1.55">${esc(c.details)}</p></div><div style="margin-top:14px"><strong>Platform</strong><div class="muted small">${esc(c.platform)}</div></div><div style="margin-top:14px"><strong>Suspect details</strong><div class="muted small">${esc(c.suspect||'Not specified')}</div></div></div><div class="card"><div class="eyebrow">USER & EVIDENCE</div><p style="margin-top:6px"><strong>${esc(user?.name||'Deleted User')}</strong></p><div class="small muted">${esc(user?.email||'')}</div><div class="divider"></div><div class="small muted">Evidence</div>${renderEvidencePreviews(c.evidence)}</div></div></div><div class="section">${canEdit?`<div class="card"><div class="eyebrow">UPDATE COMPLAINT</div><div class="form-grid" style="margin-top:12px"><div class="field"><label>Mark Status</label><select id="o-status">${STATUS_OPTIONS.map(s=>`<option ${c.status===s?'selected':''}>${s}</option>`).join('')}</select></div><div class="field"><label>Finding</label><select id="o-finding">${['No clue found yet','Initial clue identified','Evidence under examination','Suspect information identified','Further investigation required','Investigation completed'].map(s=>`<option ${c.history.at(-1)?.finding===s?'selected':''}>${s}</option>`).join('')}</select></div><div class="field full"><label>Investigation Remarks</label><textarea id="o-remarks" placeholder="Write a concise progress update."></textarea></div><div class="field full"><button class="btn btn-primary" id="save-investigation">Update Investigation</button></div></div></div>`:`<div class="card"><div class="eyebrow">ACCESS</div><p class="muted" style="margin-top:6px">This complaint is not allocated to your officer account, so investigation editing is disabled.</p></div>`}</div><div class="section"><div class="card"><div class="eyebrow">INVESTIGATION HISTORY</div><div class="timeline">${c.history.map((h,i)=>`<div class="timeline-item ${i===c.history.length-1?'current':'done'}"><span class="timeline-dot"></span><div class="timeline-title">${esc(h.status)}</div>${h.finding?`<div class="small" style="margin-top:4px"><strong>Finding:</strong> ${esc(h.finding)}</div>`:''}<div class="timeline-meta">${fmtDate(h.at)}${h.remarks?` · ${esc(h.remarks)}`:''}</div></div>`).join('')}</div></div></div>`;
+    const modal=openModal('Complaint Investigation',body,{eyebrow:''});
+    const save=modal.querySelector('#save-investigation'); if(save) save.onclick=()=>{
+      const nextStatus=modal.querySelector('#o-status').value; const finding=modal.querySelector('#o-finding').value; const remarks=modal.querySelector('#o-remarks').value.trim()||'Investigation update recorded.'; const now=new Date().toISOString(); c.status=nextStatus; c.updatedAt=now; c.history.push({status:nextStatus,finding,remarks,at:now}); saveDB(state.db); closeModal(); showToast('Investigation status updated.','success'); render();
+    };
+  }
+  function renderOfficerUsers(){
+    return `${header('Users','')}<div class="card"><div class="table-wrap"><table><thead><tr><th>Full Name</th><th>Mobile Number</th><th>Email ID</th><th>No. of Complaints Registered</th></tr></thead><tbody>${state.db.users.length?state.db.users.map(u=>`<tr><td><strong>${esc(u.name)}</strong></td><td>${esc(u.mobile||'—')}</td><td>${esc(u.email||'—')}</td><td>${state.db.complaints.filter(c=>c.userId===u.id).length}</td></tr>`).join(''):`<tr><td colspan="4" class="empty">No users registered yet.</td></tr>`}</tbody></table></div></div>`;
+  }
+
+  function renderOfficerUpdate(){
+    const acct=currentAccount();
+    return `${header('Update Complaint','OFFICER INVESTIGATION MODULE')}
+      <div class="card"><div class="eyebrow">FLOW</div><div class="lead" style="font-size:16px;margin-top:6px">Select User → Select Complaint → Mark Status → Save Update</div><div class="form-grid" style="margin-top:18px">
+        <div class="field"><label>Select User</label><select id="ou-user"><option value="">Choose user…</option>${state.db.users.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('')}</select></div>
+        <div class="field"><label>Select Complaint</label><select id="ou-complaint" disabled><option value="">Select a user first…</option></select></div>
+        <div class="field"><label>Mark Status</label><select id="ou-status">${STATUS_OPTIONS.map(s=>`<option>${s}</option>`).join('')}</select></div>
+        <div class="field"><label>Finding</label><select id="ou-finding"><option>No clue found yet</option><option>Initial clue identified</option><option>Evidence under examination</option><option>Suspect information identified</option><option>Further investigation required</option><option>Investigation completed</option></select></div>
+        <div class="field full"><label>Investigation Remarks</label><textarea id="ou-remarks" placeholder="Write the progress update visible in the user's tracking timeline."></textarea></div>
+        <div class="field full"><button class="btn btn-primary" id="ou-save">Update Complaint</button></div>
+      </div></div>`;
+  }
+
+  function renderAdminDashboard(acct){
+    const cs=state.db.complaints;
+    return `${portalHeader('Administrator',acct)}<div class="grid-4"><button class="kpi kpi-link" data-go="users"><div class="kpi-icon kpi-blue">${icon('users')}</div><div class="label">Users</div><div class="value">${state.db.users.length}</div></button><button class="kpi kpi-link" data-go="officers"><div class="kpi-icon kpi-green">${icon('officer')}</div><div class="label">Officers</div><div class="value">${state.db.officers.length}</div></button><button class="kpi kpi-link" data-go="complaints"><div class="kpi-icon kpi-purple">${icon('report')}</div><div class="label">Complaints</div><div class="value">${cs.length}</div></button><button class="kpi kpi-link" data-go="complaints"><div class="kpi-icon kpi-yellow">${icon('clock')}</div><div class="label">Pending / In Progress</div><div class="value">${cs.filter(c=>['Pending','In Progress'].includes(c.status)).length}</div></button></div><section class="section"><div class="grid-3"><div class="card action-card" data-go="complaints"><div><div class="icon-wrap">${icon('report')}</div><h3>Registered Complaints</h3><p>View every complaint and its current auto-updated status.</p></div><button class="card-link">Open complaints →</button></div><div class="card action-card" data-go="allocation"><div><div class="icon-wrap">${icon('plus')}</div><h3>Allocation Module</h3><p>Select User → Complaint → Officer and allocate the case.</p></div><button class="card-link">Allocate complaints →</button></div><div class="card action-card" data-go="officers"><div><div class="icon-wrap">${icon('officer')}</div><h3>Officers</h3><p>Create officer accounts and view allocated and pending workloads.</p></div><button class="card-link">Manage officers →</button></div></div></section>`;
+  }
+  function renderAdminComplaints(){
+    const cs=state.db.complaints;
+    return `${header('Registered Complaints','ADMINISTRATOR WORKSPACE',`<button class="btn btn-primary" data-go="allocation">${icon('plus')} Allocation Module</button>`)}
+      <div class="card"><div class="table-wrap"><table><thead><tr><th>User</th><th>Complaint ID</th><th>Complaint Criteria</th><th>Officer Handling the Case</th><th>Complaint Status</th><th>Action</th></tr></thead><tbody>${cs.length?cs.map(c=>`<tr><td>${esc(state.db.users.find(u=>u.id===c.userId)?.name||'Deleted User')}</td><td><strong>${esc(c.complaintId)}</strong></td><td>${esc(c.type)}</td><td>${esc(state.db.officers.find(o=>o.id===c.assignedOfficerId)?.name||'Not Allocated')}</td><td><span class="badge ${badgeClass(c.status)}">${esc(c.status)}</span></td><td><button class="btn btn-secondary btn-admin-complaint" data-id="${c.id}">Open</button></td></tr>`).join(''):`<tr><td colspan="6" class="empty">No complaints registered yet.</td></tr>`}</tbody></table></div></div>`;
+  }
+
+  function adminComplaintModal(id){
+    const c=state.db.complaints.find(x=>x.id===id); if(!c)return;
+    const officer=state.db.officers.find(o=>o.id===c.assignedOfficerId);
+    const user=state.db.users.find(u=>u.id===c.userId);
+    const body=`<div class="grid-2"><div class="card"><div class="eyebrow">COMPLAINT</div><h3 style="margin-top:6px">${esc(c.complaintId)}</h3><p class="muted" style="margin-top:5px">${esc(c.type)} · ${fmtDate(c.createdAt)}</p><div class="divider"></div><div class="small muted">Complaint Status</div><div style="margin-top:6px"><span class="badge ${badgeClass(c.status)}">${esc(c.status)}</span></div><div class="divider"></div><p style="line-height:1.6">${esc(c.details)}</p></div><div class="card"><div class="eyebrow">USER & ALLOCATION</div><p style="margin-top:6px"><strong>${esc(user?.name||'Deleted User')}</strong></p><div class="small muted">${esc(user?.email||'')}</div><div class="divider"></div><div class="small muted">Officer Handling the Case</div><div style="margin-top:5px"><strong>${esc(officer?.name||'Not Allocated')}</strong></div><div style="margin-top:14px"><div class="small muted">Evidence</div>${renderEvidencePreviews(c.evidence)}</div><div class="btn-row" style="margin-top:16px"><button class="btn btn-primary" id="open-allocation">Open Allocation Module</button></div></div></div><div class="section"><div class="card"><div class="eyebrow">INVESTIGATION TIMELINE</div><div class="timeline">${c.history.map(h=>`<div class="timeline-item done"><span class="timeline-dot"></span><div class="timeline-title">${esc(h.status)}</div>${h.finding?`<div class="small">Finding: ${esc(h.finding)}</div>`:''}<div class="timeline-meta">${fmtDate(h.at)} · ${esc(h.remarks||'')}</div></div>`).join('')}</div></div></div>`;
+    const modal=openModal('Complaint Details',body,{eyebrow:''});
+    modal.querySelector('#open-allocation').onclick=()=>{closeModal();go('allocation');};
+  }
+
+  function renderAdminAllocation(){
+    const users=state.db.users;
+    return `${header('Allocation Module','ADMINISTRATOR WORKSPACE')}
+      <div class="card"><div class="eyebrow">FLOW</div><div class="lead" style="font-size:16px;margin-top:6px">Select User → Select User's Complaint → Select Officer → Allocate</div><div class="form-grid" style="margin-top:18px">
+        <div class="field"><label>Select User</label><select id="alloc-user"><option value="">Choose user…</option>${users.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('')}</select></div>
+        <div class="field"><label>Select User's Complaints</label><select id="alloc-complaint" disabled><option value="">Select a user first…</option></select></div>
+        <div class="field full"><label>Select Officer</label><select id="alloc-officer"><option value="">Choose officer…</option>${state.db.officers.filter(o=>o.active!==false).map(o=>`<option value="${o.id}">${esc(o.name)} · ${esc(o.post||'Officer')}</option>`).join('')}</select></div>
+        <div class="field full"><button class="btn btn-primary" id="alloc-submit">Allocate Complaint</button></div>
+      </div></div>`;
+  }
+
+  function renderAdminUsers(){
+    return `${header('Users','')}`+`<div class="card"><div class="table-wrap"><table><thead><tr><th>Full Name</th><th>Mobile Number</th><th>Email ID</th><th>No. of Complaints Registered by the User</th></tr></thead><tbody>${state.db.users.length?state.db.users.map(u=>`<tr><td><strong>${esc(u.name)}</strong></td><td>${esc(u.mobile||'—')}</td><td>${esc(u.email||'—')}</td><td>${state.db.complaints.filter(c=>c.userId===u.id).length}</td></tr>`).join(''):`<tr><td colspan="4" class="empty">No users have registered yet.</td></tr>`}</tbody></table></div></div>`;
+  }
+
+  function renderAdminOfficers(){
+    return `${header('Officers','',`<button class="btn btn-primary" id="add-officer">${icon('plus')} Add Officer</button>`)}<div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Post</th><th>No. of Allocated Cases</th><th>No. of Pending Cases</th></tr></thead><tbody>${state.db.officers.length?state.db.officers.map(o=>{const cases=state.db.complaints.filter(c=>c.assignedOfficerId===o.id),pending=cases.filter(c=>['Pending','In Progress'].includes(c.status)).length;return `<tr><td><strong>${esc(o.name)}</strong></td><td>${esc(o.post||'Cybercrime Investigation Officer')}</td><td>${cases.length}</td><td>${pending}</td></tr>`}).join(''):`<tr><td colspan="4" class="empty">No officers available.</td></tr>`}</tbody></table></div></div>`;
+  }
+
+  function addOfficerModal(){
+    const modal=openModal('Add Officer',`<form id="off-form" class="form-grid"><div class="field"><label>Full Name</label><input id="of-name" required></div><div class="field"><label>Post</label><input id="of-post" value="Cybercrime Investigation Officer" required></div><div class="field"><label>Officer ID</label><input id="of-id" required></div><div class="field"><label>Username</label><input id="of-user" required></div><div class="field"><label>Email ID</label><input id="of-email" type="email" required></div><div class="field"><label>Mobile Number</label><input id="of-mobile" required></div><div class="field"><label>Password</label><input id="of-pass" type="password" required></div><div class="field"><label>Confirm Password</label><input id="of-pass2" type="password" required></div><div class="field"><label>6-digit Security PIN</label><input id="of-pin" maxlength="6" minlength="6" inputmode="numeric" pattern="[0-9]{6}" required></div><div class="field"><label>Address <span class="small muted">(optional)</span></label><input id="of-address"></div><div class="field full"><button class="btn btn-primary">Add Officer</button></div></form>`);
+    const pin=modal.querySelector('#of-pin'); pin.addEventListener('input',()=>{pin.value=pin.value.replace(/\D/g,'').slice(0,6);});
+    modal.querySelector('#off-form').onsubmit=e=>{e.preventDefault();const val=id=>modal.querySelector(id).value.trim();if(val('#of-pass')!==val('#of-pass2'))return showToast('Passwords do not match.','error');if(!/^\d{6}$/.test(val('#of-pin')))return showToast('Security PIN must contain exactly 6 digits.','error');if(state.db.officers.some(o=>o.username.toLowerCase()===val('#of-user').toLowerCase()||o.officerId===val('#of-id')))return showToast('Officer ID or username already exists.','error');state.db.officers.push({id:uid('off'),name:val('#of-name'),post:val('#of-post'),officerId:val('#of-id'),username:val('#of-user'),email:val('#of-email'),mobile:val('#of-mobile'),address:val('#of-address'),password:val('#of-pass'),pin:val('#of-pin'),active:true});saveDB(state.db);closeModal();showToast('Officer account created successfully.','success');render();};
+  }
+  function bindSettings(){
+    const id=x=>document.getElementById(x);
+    id('edit-profile')?.addEventListener('click',editProfileModal);
+    id('change-password')?.addEventListener('click',changePasswordModal);
+    id('reset-pin')?.addEventListener('click',resetPinModal);
+    id('switch-account')?.addEventListener('click',switchAccountModal);
+    id('theme-toggle')?.addEventListener('click',()=>{state.db.settings.theme=(state.db.settings.theme||'light')==='dark'?'light':'dark';saveDB(state.db);document.body.classList.toggle('dark',state.db.settings.theme==='dark');showToast(`${state.db.settings.theme==='dark'?'Dark':'Light'} mode enabled.`,'info');render();});
+    id('open-about')?.addEventListener('click',openAbout);
+    id('logout')?.addEventListener('click',()=>{clearSession();state.session=null;showToast('You have been logged out.','info');render();});
+    id('delete-complaints')?.addEventListener('click',()=>confirmDestructive('complaints'));
+    id('delete-users')?.addEventListener('click',()=>confirmDestructive('users'));
+    id('delete-officers')?.addEventListener('click',()=>confirmDestructive('officers'));
+    id('login-access')?.addEventListener('click',manageLoginAccessModal);
+  }
+  function confirmDestructive(kind){
+    const actor=currentAccount();
+    const isAdmin=state.session.role==='admin';
+    const label=kind==='users'?'all user accounts':kind==='officers'?'all officer accounts':'all complaints';
+    const actorLabel=isAdmin?'Administrator':state.session.role==='officer'?'Officer':'User';
+    if(kind==='officers'&&!isAdmin) return;
+    if(kind==='users'&&!(isAdmin||state.session.role==='officer')) return;
+    const helper=kind==='complaints'&&state.session.role==='user'?'Only your own complaint records will be removed.':'This action removes the selected records stored in this browser.';
+    const modal=openModal(kind==='users'?'Delete All Users':kind==='officers'?'Delete All Officers':'Delete All Complaints',`<div class="card"><h3>This action cannot be undone.</h3><p class="muted" style="margin-top:8px">${esc(helper)}</p><div class="divider"></div><div class="field"><label>${actorLabel} password</label><input id="danger-pass" type="password"></div><div class="btn-row" style="margin-top:16px"><button class="btn btn-secondary" id="danger-cancel">Cancel</button><button class="btn btn-danger" id="danger-go">Confirm Delete</button></div></div>`,{eyebrow:'DANGER ZONE'});
+    modal.querySelector('#danger-cancel').onclick=closeModal;
+    modal.querySelector('#danger-go').onclick=()=>{
+      if(modal.querySelector('#danger-pass').value!==actor.password)return showToast(`${actorLabel} password is incorrect.`,'error');
+      if(kind==='complaints'){
+        if(state.session.role==='user') state.db.complaints=state.db.complaints.filter(c=>c.userId!==actor.id); else state.db.complaints=[];
+      }else if(kind==='users'){
+        const deletedIds=new Set(state.db.users.map(u=>u.id));
+        state.db.complaints.forEach(c=>{if(deletedIds.has(c.userId))c.userId=null;});
+        state.db.users=[];
+      }else if(kind==='officers'){
+        state.db.complaints.forEach(c=>{c.assignedOfficerId=null;}); state.db.officers=[];
+      }
+      saveDB(state.db); closeModal(); showToast(kind==='complaints'?'All selected complaints deleted.':kind==='users'?'All users deleted.':'All officers deleted.','warning'); render();
+    };
+  }
+  function manageLoginAccessModal(){
+    if(state.session.role!=='admin') return;
+    const rows=[...state.db.users.map(a=>({...a,kind:'User'})),...state.db.officers.map(a=>({...a,kind:'Officer'}))];
+    const body=`<div class="helper" style="margin-bottom:14px">Removing login access sets the account to inactive. The account data is retained until deleted by an authorized role.</div><div class="list">${rows.length?rows.map(a=>`<div class="list-item"><div><strong>${esc(a.name)}</strong><div class="small muted">${esc(a.kind)} · ${esc(a.username)}</div></div><button class="btn ${a.active!==false?'btn-danger':'btn-secondary'}" data-access-id="${a.id}" data-access-kind="${a.kind.toLowerCase()}">${a.active!==false?'Remove Login Access':'Restore Login Access'}</button></div>`).join(''):'<div class="empty">No users or officers are available.</div>'}</div>`;
+    const modal=openModal('Manage Login Access',body,{eyebrow:'ADMINISTRATOR ONLY'});
+    modal.querySelectorAll('[data-access-id]').forEach(btn=>btn.onclick=()=>{
+      const group=btn.dataset.accessKind==='user'?'users':'officers'; const a=state.db[group].find(x=>x.id===btn.dataset.accessId); if(!a)return; a.active=a.active===false; saveDB(state.db); closeModal(); showToast(a.active?'Login access restored.':'Login access removed.','success'); render();
+    });
+  }
+
+  function wirePage(role){
+    document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+    document.getElementById('page-back')?.addEventListener('click',goBack);
+    document.querySelectorAll('[data-track]').forEach(b=>b.onclick=()=>{go('track');});
+    document.querySelectorAll('[data-download-report]').forEach(b=>b.onclick=()=>{const c=state.db.complaints.find(x=>x.id===b.dataset.downloadReport); if(c) downloadComplaintReport(c);});
+    if(state.page==='report') bindReport();
+    if(state.page==='awareness'){ document.getElementById('start-quiz')?.addEventListener('click',renderQuizModal); }
+    if(state.page==='settings') bindSettings();
+    if(role==='officer'){
+      document.querySelectorAll('.btn-open-officer,[data-officer-complaint]').forEach(b=>b.addEventListener('click',()=>officerComplaintModal(b.dataset.id||b.dataset.officerComplaint)));
+      const user=document.getElementById('ou-user'), complaint=document.getElementById('ou-complaint');
+      if(user&&complaint){
+        user.onchange=()=>{
+          const acct=currentAccount(); const list=state.db.complaints.filter(c=>c.assignedOfficerId===acct.id&&c.userId===user.value);
+          complaint.disabled=!user.value; complaint.innerHTML=list.length?`<option value="">Choose complaint…</option>${list.map(c=>`<option value="${c.id}">${esc(c.complaintId)} · ${esc(c.type)}</option>`).join('')}`:'<option value="">No allocated complaints for this user</option>';
+        };
+      }
+      const save=document.getElementById('ou-save'); if(save) save.onclick=()=>{
+        const acct=currentAccount(), userId=document.getElementById('ou-user').value, complaintIdValue=document.getElementById('ou-complaint').value; if(!userId||!complaintIdValue)return showToast('Select a user and complaint first.','warning');
+        const c=state.db.complaints.find(x=>x.id===complaintIdValue&&x.assignedOfficerId===acct.id); if(!c)return showToast('Complaint not found or not allocated to you.','error');
+        const now=new Date().toISOString(), next=document.getElementById('ou-status').value, finding=document.getElementById('ou-finding').value, remarks=document.getElementById('ou-remarks').value.trim()||'Investigation update recorded.'; c.status=next;c.updatedAt=now;c.history.push({status:next,finding,remarks,at:now});saveDB(state.db);showToast('Complaint status updated successfully.','success');render();
+      };
+    }
+    if(role==='admin'){
+      document.querySelectorAll('.btn-admin-complaint').forEach(b=>b.addEventListener('click',()=>adminComplaintModal(b.dataset.id)));
+      document.getElementById('add-officer')?.addEventListener('click',addOfficerModal);
+      const user=document.getElementById('alloc-user'), complaint=document.getElementById('alloc-complaint');
+      if(user&&complaint){
+        user.onchange=()=>{
+          const list=state.db.complaints.filter(c=>c.userId===user.value); complaint.disabled=!user.value; complaint.innerHTML=list.length?`<option value="">Choose complaint…</option>${list.map(c=>`<option value="${c.id}">${esc(c.complaintId)} · ${esc(c.type)} · ${esc(c.status)}</option>`).join('')}`:'<option value="">No complaints registered by this user</option>';
+        };
+      }
+      const alloc=document.getElementById('alloc-submit'); if(alloc) alloc.onclick=()=>{
+        const userId=document.getElementById('alloc-user').value, complaintIdValue=document.getElementById('alloc-complaint').value, officerId=document.getElementById('alloc-officer').value; if(!userId||!complaintIdValue||!officerId)return showToast('Select user, complaint, and officer before allocating.','warning');
+        const c=state.db.complaints.find(x=>x.id===complaintIdValue&&x.userId===userId); if(!c)return showToast('Selected complaint was not found.','error');
+        const officer=state.db.officers.find(o=>o.id===officerId); const now=new Date().toISOString(); c.assignedOfficerId=officerId;c.status='Pending';c.updatedAt=now;c.history.push({status:'Pending',finding:'',remarks:`Complaint allocated to ${officer?.name||'Officer'}.`,at:now});saveDB(state.db);showToast('Complaint allocated successfully.','success');render();
+      };
+    }
+  }
+  window.addEventListener('popstate',()=>{ if(!state.session) return; goBack(true); });
+  try { window.history.replaceState({portalPage:state.page},'',`#${encodeURIComponent(state.page)}`); } catch(e) {}
+  window.addEventListener('storage',()=>{try{state.db=JSON.parse(localStorage.getItem(STORAGE)||'null')||state.db;}catch(e){} if(state.session) render();});
+  render();
+})();
+
+  </script>
+<script>
+/* Visual-only motion enhancement: one observer, one reveal style, no parallax/transform conflict. */
+(function(){
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const selectors = '.view > .topbar, .hero-main, .hero-side, .section-head, .card, .kpi, .table-wrap, .article-card, .search-box, .search-results, .list-item';
+  let observer = null;
+
+  function decorate(){
+    const nodes = Array.from(document.querySelectorAll(selectors));
+    nodes.forEach(el=>el.classList.add('reveal-ready'));
+    if(reduce){
+      nodes.forEach(el=>el.classList.add('revealed'));
+      return;
+    }
+    if(observer) observer.disconnect();
+    observer = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        // Replay the reveal every time the element enters the viewport.
+        // Removing the class on exit lets the next downward scroll animate again.
+        entry.target.classList.toggle('revealed', entry.isIntersecting);
+      });
+    },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    nodes.forEach(el=>observer.observe(el));
+  }
+
+  decorate();
+  const app=document.getElementById('app');
+  if(app){
+    new MutationObserver(()=>requestAnimationFrame(decorate)).observe(app,{childList:true,subtree:true});
+  }
+})();
+</script>
+<script id="material3-motion-ui">
+(function(){
+  const SELECTOR='.btn,.nav-item,.utility-toggle,.utility-search,.auth-action,.segmented button,.modal-close,.list-item,.quiz-option,.search-result';
+  document.addEventListener('pointerdown',function(e){
+    const target=e.target.closest&&e.target.closest(SELECTOR);
+    if(!target||target.disabled)return;
+    const r=target.getBoundingClientRect(),size=Math.max(r.width,r.height)*1.8;
+    const ripple=document.createElement('span');ripple.className='m3-ripple';
+    ripple.style.width=ripple.style.height=size+'px';ripple.style.left=(e.clientX-r.left-size/2)+'px';ripple.style.top=(e.clientY-r.top-size/2)+'px';
+    target.appendChild(ripple);setTimeout(()=>ripple.remove(),380);
+  },true);
+  const style=document.createElement('style');style.textContent=`${SELECTOR}{position:relative;overflow:hidden;isolation:isolate}.m3-ripple{position:absolute;z-index:0;border-radius:50%;background:rgba(11,87,208,.12);transform:scale(.15);animation:m3Ripple 400ms var(--m3-motion) forwards;pointer-events:none}${SELECTOR}>*{position:relative;z-index:1}@keyframes m3Ripple{0%{opacity:.9;transform:scale(.15)}100%{opacity:0;transform:scale(1)}}`;document.head.appendChild(style);
+})();
+</script>
+
+</body>
+</html>
